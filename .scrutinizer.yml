@@ -1,12 +1,33 @@
 build:
-    nodes:
-        my-first-test:
-        # ... All other options under "build" except "nodes"
+    dependencies:
+        override:
+            - composer self-update
+            - composer install --ignore-platform-reqs --no-interaction --no-scripts
 
-        my-second-test:
-            requires:
-                - branch: master # will only run when build is related to the "master" branch
-#                - analysis # will only run when no failure conditions were met in the analysis
+    environment:
+        php:
+            version: 7.2
+            ini:
+                'date.timezone': 'Europe/Amsterdam'
+        mysql: false
+        postgresql: false
+        redis: false
+        elasticsearch: false
+        rabbitmq: false
+        mongodb: false
+        neo4j: false
+        memcached: false
+
+    project_setup:
+        override: true
+    nodes:
+        analysis:
+            tests:
+                override:
+                    - make php_linting
+    tests:
+        override:
+            - command: './vendor/bin/phpunit -c phpunit.xml'
 
     resources:
         cpus: 1
@@ -14,10 +35,10 @@ build:
     root_path: './'
 
     cache:
-        disabled: true
+        disabled: false
         directories:
-            - 'node_modules/'
-            - 'vendor/'
+            - vendor/
+            - ~/.composer/
 
 filter:
     paths:
