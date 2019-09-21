@@ -1,0 +1,25 @@
+{
+  "name": "shahrokh/site-api",
+  "description": "Nari CMS api center, all api endpoints to manage content management system are collected here",
+  "type": "project",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Shahrokh",
+      "email": "shahorkhnabavi@gmail.com"
+    }
+  ],
+  "version": "0.1.0",
+  "minimum-stability": "stable",
+  "autoload": {
+    "psr-4": {
+      "SiteApi\\": "src/"
+    }
+  },
+  "require": {
+    "php" : "^7.2"
+  },
+  "require-dev": {
+    "squizlabs/php_codesniffer": "^3.4"
+  }
+}

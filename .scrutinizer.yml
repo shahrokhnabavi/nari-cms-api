@@ -1,0 +1,28 @@
+build:
+    nodes:
+        my-first-test:
+        # ... All other options under "build" except "nodes"
+
+        my-second-test:
+            requires:
+                - branch: master # will only run when build is related to the "master" branch
+#                - analysis # will only run when no failure conditions were met in the analysis
+
+    resources:
+        cpus: 1
+
+    root_path: './'
+
+    cache:
+        disabled: true
+        directories:
+            - 'node_modules/'
+            - 'vendor/'
+
+filter:
+    paths:
+        - 'src/*'
+    excluded_paths:
+        - 'node_modules/*'
+        - 'vendor/*'
+        - 'scripts/*'
