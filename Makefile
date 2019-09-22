@@ -58,3 +58,16 @@ test_acceptance: ## Run all acceptance test
 .PHONY: test_unit
 test_unit: ## Run all unit tests
 	echo "${RED}${OS} ${RED}"
+
+
+.PHONY: docker_build
+docker_build: ## run all docker composer container and build them
+	docker-compose up -d --build
+
+.PHONY: docker_up
+docker_up: ## run all docker composer container
+	docker-compose up -d
+
+.PHONY: docker_bash
+docker_bash: ## run bash command of docker
+	docker-compose exec site_api_web /bin/sh

@@ -1,0 +1,36 @@
+# https://github.com/akhomy/docker-compose-lamp
+version: "3.5"
+
+services:
+    site_api_php:
+        build: ./docker/images/php-fpm
+        container_name: site_api_php
+        networks:
+            - site_api_network
+        volumes:
+            - ./public/:/var/www/html/
+
+    site_api_web:
+        build: ./docker/images/apache/
+        container_name: site_api_web
+        depends_on:
+            - site_api_php
+        networks:
+            - site_api_network
+        ports:
+            - "80:80"
+        volumes:
+            - ./public/:/var/www/html/
+
+    mailhog:
+        image: mailhog/mailhog
+        container_name: mailhog
+        networks:
+            - site_api_network
+        ports:
+            - "8025:8025"
+
+networks:
+    site_api_network:
+        name: site_api_network
+
