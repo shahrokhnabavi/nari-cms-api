@@ -25,9 +25,10 @@ build:
             tests:
                 override:
                     - make php_linting
-    tests:
-        override:
-            - command: './vendor/bin/phpunit -c phpunit.xml'
+        tests_1:
+            tests:
+                override:
+                    - command: make test_unit
 
     resources:
         cpus: 1

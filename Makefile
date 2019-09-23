@@ -57,8 +57,7 @@ test_acceptance: ## Run all acceptance test
 
 .PHONY: test_unit
 test_unit: ## Run all unit tests
-	echo "${RED}${OS} ${RED}"
-
+	php ${VENDOR}/phpunit -c phpunit.xml
 
 .PHONY: docker_build
 docker_build: ## run all docker composer container and build them

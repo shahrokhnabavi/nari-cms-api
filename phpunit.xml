@@ -8,6 +8,8 @@
          convertNoticesToExceptions="true"
          convertWarningsToExceptions="true"
          processIsolation="false"
+         cacheResult="true"
+         cacheResultFile="./tests/cache/.phpunit.result.cache"
          stopOnFailure="false">
     <testsuites>
         <testsuite name="Package">
