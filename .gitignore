@@ -1,4 +1,6 @@
 .idea/
 
+tests/cache/
+
 vendor/
 node_modules/
