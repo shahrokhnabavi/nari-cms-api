@@ -69,4 +69,4 @@ docker_up: ## run all docker composer container
 
 .PHONY: docker_bash
 docker_bash: ## run bash command of docker
-	docker-compose exec site_api_web /bin/sh
+	docker-compose exec site_api_php /bin/sh

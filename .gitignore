@@ -1,5 +1,6 @@
 .idea/
 
+docker/data/*
 tests/cache/
 
 vendor/
