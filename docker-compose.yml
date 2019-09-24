@@ -30,6 +30,21 @@ services:
         ports:
             - "8025:8025"
 
+    site_api_mysql:
+        build: ./docker/images/mysql
+        container_name: site_api_mysql
+        environment:
+            MYSQL_ROOT_PASSWORD: 123
+            MYSQL_USER: devuser
+            MYSQL_PASSWORD: devpass
+            MYSQL_DATABASE: web_db
+        networks:
+            - site_api_network
+        ports:
+            - "3306:3306"
+        volumes:
+            - ./docker/data/mysql:/var/lib/mysql
+
 networks:
     site_api_network:
         name: site_api_network
