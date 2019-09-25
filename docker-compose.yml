@@ -8,7 +8,7 @@ services:
         networks:
             - site_api_network
         volumes:
-            - ./public/:/var/www/html/
+            - ./:/var/www/
 
     site_api_web:
         build: ./docker/images/apache/
@@ -20,15 +20,15 @@ services:
         ports:
             - "80:80"
         volumes:
-            - ./public/:/var/www/html/
+            - ./:/var/www/
 
-    mailhog:
-        image: mailhog/mailhog
-        container_name: mailhog
-        networks:
-            - site_api_network
-        ports:
-            - "8025:8025"
+#    mailhog:
+#        image: mailhog/mailhog
+#        container_name: mailhog
+#        networks:
+#            - site_api_network
+#        ports:
+#            - "8025:8025"
 
     site_api_mysql:
         build: ./docker/images/mysql
