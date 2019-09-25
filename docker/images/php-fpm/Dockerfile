@@ -239,17 +239,15 @@ RUN apk add --no-cache \
     apk del build-base linux-headers pcre-dev openssl-dev; \
     rm -rf /var/cache/apk/*;
 
-#RUN apk del .build-deps
-#   && pecl install xdebug
-#   && rm -rf /tmp/pear
-#   && echo "zend_extension=$(find /usr/local/lib/php/extensions/ -name xdebug.so)\n" >> /usr/local/etc/php/conf.d/xdebug.ini
-#   && echo "xdebug.remote_enable=on\n" >> /usr/local/etc/php/conf.d/xdebug.ini
-#   && echo "xdebug.remote_autostart=off\n" >> /usr/local/etc/php/conf.d/xdebug.ini
-#   && echo "xdebug.remote_port=9000\n" >> /usr/local/etc/php/conf.d/xdebug.ini
+RUN apk add --no-cache  autoconf g++ make; \
+    pecl install -f xdebug; \
+    apk del --purge autoconf g++ make;
+
+COPY xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
+
+#    rm -rf /tmp/pear
 #   && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 #ADD php.ini /usr/local/etc/php/
 
 USER www-data
-
-WORKDIR /var/www
