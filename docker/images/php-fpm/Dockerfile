@@ -233,9 +233,14 @@ RUN apk add --no-cache \
 	    freetype-dev \
 	    libjpeg-turbo-dev \
 	    libmcrypt-dev \
+	    icu-dev \
+        gettext \
+        gettext-dev \
 	    libpng-dev; \
 	docker-php-ext-configure gd --with-png-dir=/usr --with-jpeg-dir=/usr --with-freetype-dir=/usr/include/; \
-	docker-php-ext-install gd zip; \
+	docker-php-ext-configure intl; \
+	docker-php-ext-configure gettext; \
+	docker-php-ext-install gd zip gettext intl; \
     apk del build-base linux-headers pcre-dev openssl-dev; \
     rm -rf /var/cache/apk/*;
 
