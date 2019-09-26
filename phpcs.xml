@@ -3,7 +3,7 @@
     <description>The coding standard for our project.</description>
     <rule ref="PSR2"/>
 
-    <file>src</file>
+    <file>src/</file>
 
     <exclude-pattern>vendor/*</exclude-pattern>
     <exclude-pattern>node_modules/*</exclude-pattern>
