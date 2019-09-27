@@ -25,6 +25,7 @@
     "ext-gettext": "*",
     "ext-mbstring": "*",
     "league/container": "^3.3",
+    "slim/psr7": "^0.5.0",
     "slim/slim": "4.0.0"
   },
   "require-dev": {
