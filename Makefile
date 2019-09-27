@@ -13,15 +13,17 @@ DEFAULT := \033[39m
 ENV := development
 VENDOR := ./vendor/bin
 
-DOCKER := true
-DOCKER_NETWORK := bridge
-OS := $(shell uname)
-HOST_IP := $(shell ifconfig | sed -En 's/127.0.0.1//;s/.*inet (addr:)?(([0-9]*\.){3}[0-9]*).*/\2/p' | sed -n 1p)
+ifeq ($(DOCKER),)
+	DOCKER := true
+	DOCKER_NETWORK := bridge
+	OS := $(shell uname)
+	HOST_IP := $(shell ifconfig | sed -En 's/127.0.0.1//;s/.*inet (addr:)?(([0-9]*\.){3}[0-9]*).*/\2/p' | sed -n 1p)
+endif
 
 ifeq ($(DOCKER),true)
-SRART_COMMAND := docker run --rm -it --init --net=${DOCKER_NETWORK} --volumes-form=site-data site-api
+	START_COMMAND := docker-compose exec site_api_php
 else
-START_COMMAND :=
+	START_COMMAND :=
 endif
 
 NODE_MODULES := ./node_modules/.bin
@@ -36,20 +38,25 @@ help:
 	@echo 'To run a task: make [task_name] ARGS=[your-arguments]'
 	@echo "\tExample: make test_acceptance ARGS='-g debug -vvv'"
 	@echo ''
-	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "%s%-20s%s %s%s\n", "${CYAN}", $$1, "${CYAN}${LIGHT_GRAY}", $$2, "${LIGHT_GRAY}${DEFAULT}"}'
+	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "%s%-20s%s %s%s\n", "${CYAN}", $$1, "${LIGHT_GRAY}", $$2, "${DEFAULT}"}'
 	@echo ''
 
 .PHONY: install
-install: ## Install application and all depenancies
-	echo "${RED}${OS} ${RED}"
+install: ## Install development environment and all depenancies
+	@./scripts/install-development
+	@echo ''
 
-.PHONY: php_linting
-php_linting: ## Check php code style
-	php ${VENDOR}/phpcs
+.PHONY: php_lint
+php_lint: ## Check php code style
+	@echo "${YELLOW}The process php_lint is started.${DEFAULT}"
+	${START_COMMAND} php ${VENDOR}/phpcs
+	@echo ''
 
-.PHONY: php_linting_fix
-php_linting_fix: ## Fix php code style errors
-	php ${VENDOR}/phpcbf
+.PHONY: php_lint_fix
+php_lint_fix: ## Fix php code style errors
+	@echo "${YELLOW}The process php_lint_fix is started.${DEFAULT}"
+	${START_COMMAND} php ${VENDOR}/phpcbf
+	@echo ''
 
 .PHONY: test_acceptance
 test_acceptance: ## Run all acceptance test
@@ -57,16 +64,8 @@ test_acceptance: ## Run all acceptance test
 
 .PHONY: test_unit
 test_unit: ## Run all unit tests
-	php ${VENDOR}/phpunit -c phpunit.xml
+	${START_COMMAND} php ${VENDOR}/phpunit -c phpunit.xml
 
-.PHONY: docker_build
-docker_build: ## run all docker composer container and build them
-	docker-compose up -d --build
-
-.PHONY: docker_up
-docker_up: ## run all docker composer container
-	docker-compose up -d
-
-.PHONY: docker_bash
-docker_bash: ## run bash command of docker
-	docker-compose exec site_api_php /bin/sh
+.PHONY: envi
+envi: ## Run all unit tests
+	@echo "huhu ${START_COMMAND}"

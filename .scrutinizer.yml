@@ -17,6 +17,8 @@ build:
         mongodb: false
         neo4j: false
         memcached: false
+        variables:
+            DOCKER: 'false'
 
     project_setup:
         override: true
@@ -24,11 +26,11 @@ build:
         analysis:
             tests:
                 override:
-                    - make php_linting
+                    - make php_lint
         tests_1:
             tests:
                 override:
-                    - command: make test_unit
+                    - make test_unit
 
     resources:
         cpus: 1

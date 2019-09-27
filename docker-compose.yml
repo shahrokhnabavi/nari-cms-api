@@ -5,14 +5,17 @@ services:
     site_api_php:
         build: ./docker/images/php-fpm
         container_name: site_api_php
+        image: site_api_php
         networks:
             - site_api_network
         volumes:
             - ./:/var/www/
+        working_dir: /var/www
 
     site_api_web:
         build: ./docker/images/apache/
         container_name: site_api_web
+        image: site_api_web
         depends_on:
             - site_api_php
         networks:
@@ -21,8 +24,9 @@ services:
             - "80:80"
         volumes:
             - ./:/var/www/
+        working_dir: /var/www
 
-#    mailhog:
+    #    mailhog:
 #        image: mailhog/mailhog
 #        container_name: mailhog
 #        networks:
@@ -33,6 +37,7 @@ services:
     site_api_mysql:
         build: ./docker/images/mysql
         container_name: site_api_mysql
+        image: site_api_mysql
         environment:
             MYSQL_ROOT_PASSWORD: 123
             MYSQL_USER: devuser

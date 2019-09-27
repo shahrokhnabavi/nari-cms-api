@@ -248,6 +248,8 @@ RUN apk add --no-cache  autoconf g++ make; \
     pecl install -f xdebug; \
     apk del --purge autoconf g++ make;
 
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer
+
 COPY xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
 
 #    rm -rf /tmp/pear
