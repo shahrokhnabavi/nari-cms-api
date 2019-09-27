@@ -1,0 +1,22 @@
+#!/bin/bash
+
+GREEN=$(tput setaf 2)
+DEFAULT=$(tput setaf 7)
+
+echo "${GREEN}The development environment will be installed${DEFAULT}"
+
+echo "$(tput setaf 2)Copy git hooks${DEFAULT}"
+mkdir -p .git/hooks/ && cp scripts/hooks/* .git/hooks/
+
+echo "${GREEN}Stop all active docker containers${DEFAULT}"
+docker stop $(docker ps -a -q) > /dev/null 2>&1
+
+echo "${GREEN}Destroy current application development environment${DEFAULT}"
+docker-compose down --volumes > /dev/null 2>&1
+
+echo "${GREEN}Start the application development environment${DEFAULT}"
+docker-compose up -d --build
+sleep 10s
+
+echo "${GREEN}Start the application development environment${DEFAULT}"
+docker-compose exec site_api_php composer install
