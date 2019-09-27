@@ -18,8 +18,7 @@ class ContainerFactory
     {
         $container = new Container();
 
-        //$container->delegate(new \Slim\Container());
-        //$container->addServiceProvider(SlimServiceProvider::class);
+        $container->addServiceProvider(SlimServiceProvider::class);
         //$container->addServiceProvider(PdoServiceProvider::class);
 
         return $container;
