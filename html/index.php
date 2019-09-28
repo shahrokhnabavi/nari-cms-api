@@ -5,7 +5,7 @@ use SiteApi\Infrastructure\ContainerFactory;
 use SiteApi\Infrastructure\Middleware\JsonValidationMiddleware;
 use Slim\App;
 
-require __DIR__ . '/bootstrap.php';
+require __DIR__ . '/../src/bootstrap.php';
 
 $container = ContainerFactory::create();
 
