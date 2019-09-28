@@ -1,0 +1,88 @@
+<?php
+declare(strict_types = 1);
+
+namespace SiteApi\Infrastructure\Logging;
+
+use Exception;
+use Monolog\Formatter\LineFormatter;
+use Monolog\Handler\StreamHandler;
+use Monolog\Handler\SyslogUdpHandler;
+use Monolog\Logger;
+use Monolog\Processor\WebProcessor;
+use Psr\Log\LoggerInterface;
+use Vube\Monolog\Formatter\SplunkLineFormatter;
+
+class LoggerFactory
+{
+    /** @var string */
+    private $name;
+
+    /**
+     * @param string $name
+     */
+    public function __construct(string $name)
+    {
+        $this->name = $name;
+    }
+
+    /**
+     * @param string $filePath
+     * @param string $logLevel
+     *
+     * @return LoggerInterface
+     * @throws Exception
+     */
+    public function createBasicFileLogger(string $filePath, string $logLevel): LoggerInterface
+    {
+        $logger = new Logger($this->name);
+
+        $formatter = new LineFormatter(
+            str_replace('%channel%.', '', LineFormatter::SIMPLE_FORMAT),
+            null,
+            false,
+            true
+        );
+
+        $fileHandler = new StreamHandler($filePath, 1);
+        $fileHandler->setFormatter($formatter);
+
+        $consoleHandler = new StreamHandler('php://stdout', $this->determineLogLevel($logLevel));
+        $consoleHandler->setFormatter($formatter);
+
+        $logger->pushHandler($fileHandler);
+        $logger->pushHandler($consoleHandler);
+        $logger->pushProcessor(new LogMessageTagProcessor());
+
+        return $logger;
+    }
+
+    public function createSplunkLogger(string $hostname): LoggerInterface
+    {
+        $logger = new Logger($this->name);
+
+        $formatter = new SplunkLineFormatter();
+        $formatter->setQuoteReplacement('"');
+
+        $handler = new SyslogUdpHandler($hostname);
+        $handler->setFormatter($formatter);
+
+        $logger->pushHandler($handler);
+        $logger->pushProcessor(new WebProcessor());
+        $logger->pushProcessor(new LogMessageTagProcessor());
+
+        return $logger;
+    }
+
+    /**
+     * @param string $level
+     *
+     * @return int
+     */
+    private function determineLogLevel(string $level): int
+    {
+        $levels = Logger::getLevels();
+        $levelsKey = strtoupper($level);
+
+        return $levels[$levelsKey] ?? Logger::WARNING;
+    }
+}

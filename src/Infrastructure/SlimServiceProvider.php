@@ -11,10 +11,14 @@ use Slim\Factory\AppFactory;
 /**
  * @codeCoverageIgnore
  */
-class SlimServiceProvider extends AbstractServiceProvider
+final class SlimServiceProvider extends AbstractServiceProvider
 {
+    /** @var string[] */
     protected $provides = [App::class];
 
+    /**
+     * @return void
+     */
     public function register(): void
     {
         /** @var Container $container */
