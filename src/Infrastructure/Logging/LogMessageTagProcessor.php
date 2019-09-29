@@ -13,7 +13,7 @@ class LogMessageTagProcessor
      *
      * @return string[]
      */
-    public function __invoke(array $record): array
+    public function __invoke(array $record = []): array
     {
         $record['extra'] = array_merge(($record['extra'] ?? []), self::$tags);
 
