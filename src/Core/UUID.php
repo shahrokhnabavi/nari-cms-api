@@ -28,6 +28,7 @@ class UUID implements IdentityInterface
 
     /**
      * @inheritdoc
+     * @codeCoverageIgnore
      */
     public function asBinary(): string
     {

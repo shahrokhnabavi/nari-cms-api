@@ -1,7 +1,7 @@
 .idea/
 
 docker/data/*
-tests/cache/
+tests/tmp/
 
 vendor/
 node_modules/

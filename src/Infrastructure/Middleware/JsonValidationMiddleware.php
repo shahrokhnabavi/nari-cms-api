@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace SiteApi\Infrastructure\Middleware;
 
+use Fig\Http\Message\StatusCodeInterface;
 use InvalidArgumentException;
 use JsonSchema\Constraints\Constraint;
 use JsonSchema\Validator;
@@ -58,10 +59,10 @@ class JsonValidationMiddleware
                 json_encode($this->validator->getErrors())
             );
 
-            $response = new Response();
+            $response = new Response(StatusCodeInterface::STATUS_BAD_REQUEST);
             $response->getBody()->write(json_encode($this->validator->getErrors()) ?: '');
 
-            return $response->withStatus(400);
+            return $response->withHeader('Content-Type', 'application/json')->withStatus(400);
         }
 
         return $response;
@@ -72,7 +73,7 @@ class JsonValidationMiddleware
      *
      * @return bool
      */
-    public function validateRequest(ServerRequestInterface $request): bool
+    private function validateRequest(ServerRequestInterface $request): bool
     {
         /** @var Route $route */
         $route = $request->getAttribute('route');
@@ -84,13 +85,13 @@ class JsonValidationMiddleware
         $schemaName = $route->getArgument('validationSchema', '');
 
         if ($schemaName === '') {
-            throw new InvalidArgumentException('no schema defined for ' . $request->getUri());
+            throw new InvalidArgumentException('No schema defined for ' . $request->getUri());
         }
 
         $schemaFile = __DIR__ . self::SHCEMA_DIR . $schemaName;
 
         if (!is_readable($schemaFile)) {
-            throw new InvalidArgumentException('schema file for ' . $request->getUri() . ' is not available');
+            throw new InvalidArgumentException('Schema file for ' . $request->getUri() . ' is not available');
         }
 
         $schema = json_decode(file_get_contents($schemaFile));
@@ -105,6 +106,7 @@ class JsonValidationMiddleware
             $schema,
             Constraint::CHECK_MODE_TYPE_CAST
         );
+
         return $this->validator->isValid();
     }
 }

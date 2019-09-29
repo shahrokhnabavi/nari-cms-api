@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Tests;
+namespace Tests\Units;
 
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;

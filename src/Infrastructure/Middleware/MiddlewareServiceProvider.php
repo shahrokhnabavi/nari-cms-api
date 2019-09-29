@@ -14,7 +14,10 @@ use Psr\Log\LoggerInterface;
 final class MiddlewareServiceProvider extends AbstractServiceProvider
 {
     /** @var string[] */
-    protected $provides = [JsonValidationMiddleware::class];
+    protected $provides = [
+        JsonValidationMiddleware::class,
+        JsonBodyParserMiddleware::class,
+    ];
 
     /**
      * @return void
@@ -23,6 +26,10 @@ final class MiddlewareServiceProvider extends AbstractServiceProvider
     {
         /** @var Container $container */
         $container = $this->getContainer();
+
+        $container->add(JsonBodyParserMiddleware::class, function () use ($container): JsonBodyParserMiddleware {
+            return new JsonBodyParserMiddleware();
+        });
 
         $container->add(JsonValidationMiddleware::class, function () use ($container): JsonValidationMiddleware {
             return new JsonValidationMiddleware(

@@ -64,8 +64,4 @@ test_acceptance: ## Run all acceptance test
 
 .PHONY: test_unit
 test_unit: ## Run all unit tests
-	${START_COMMAND} php ${VENDOR}/phpunit -c phpunit.xml
-
-.PHONY: envi
-envi: ## Run all unit tests
-	@echo "huhu ${START_COMMAND}"
+	${START_COMMAND} php ${VENDOR}/phpunit -c phpunit.xml --testsuite Units
