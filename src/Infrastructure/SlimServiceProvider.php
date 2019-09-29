@@ -14,7 +14,9 @@ use Slim\Factory\AppFactory;
 final class SlimServiceProvider extends AbstractServiceProvider
 {
     /** @var string[] */
-    protected $provides = [App::class];
+    protected $provides = [
+        App::class,
+    ];
 
     /**
      * @return void

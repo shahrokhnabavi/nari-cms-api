@@ -6,7 +6,7 @@ namespace SiteApi\Infrastructure\Logging;
 class LogMessageTagProcessor
 {
     /** @var string[] */
-    private static $tags;
+    private static $tags = [];
 
     /**
      * @param string[] $record

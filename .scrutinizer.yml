@@ -30,7 +30,10 @@ build:
         tests_1:
             tests:
                 override:
-                    - make test_unit
+                    - command: make test_unit
+                      coverage:
+                        file: tests/coverage.xml
+                        format: clover
 
     resources:
         cpus: 1
