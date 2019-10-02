@@ -34,7 +34,7 @@ final class LoggingServiceProvider extends AbstractServiceProvider
                 );
             }
 
-            return $loggerFactory->createSplunkLogger(
+            return $loggerFactory->createPaperTrailAppLogger(
                 'logger.hostname'
             );
         });

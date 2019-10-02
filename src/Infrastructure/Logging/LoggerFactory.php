@@ -56,14 +56,26 @@ class LoggerFactory
         return $logger;
     }
 
-    public function createSplunkLogger(string $hostname): LoggerInterface
+    /**
+     * @see https://papertrailapp.com/
+     * @param string $hostname
+     * @param int $port
+     * @param string $logLevel
+     *
+     * @return LoggerInterface
+     */
+    public function createPaperTrailAppLogger(string $hostname, int $port, string $logLevel): LoggerInterface
     {
         $logger = new Logger($this->name);
 
-        $formatter = new SplunkLineFormatter();
-        $formatter->setQuoteReplacement('"');
+        $formatter = new LineFormatter('%channel%.%level_name%: %message% %extra%');
 
-        $handler = new SyslogUdpHandler($hostname);
+        $handler = new SyslogUdpHandler(
+            $hostname,
+            $port,
+            LOG_USER,
+            $this->determineLogLevel($logLevel)
+        );
         $handler->setFormatter($formatter);
 
         $logger->pushHandler($handler);

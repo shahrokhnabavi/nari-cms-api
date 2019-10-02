@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "59320e12878d1f7bf7f2af1579a455f5",
+    "content-hash": "55375f8af9f4427ca4befd1b36c4bb1e",
     "packages": [
         {
             "name": "fig/http-message-util",
@@ -820,48 +820,6 @@
                 "router"
             ],
             "time": "2019-08-01T16:11:29+00:00"
-        },
-        {
-            "name": "vube/monolog-splunk-formatter",
-            "version": "1.0.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/vube/monolog-splunk-formatter.git",
-                "reference": "8ef108914cab76c0c233258798b5eb40b5747f43"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/vube/monolog-splunk-formatter/zipball/8ef108914cab76c0c233258798b5eb40b5747f43",
-                "reference": "8ef108914cab76c0c233258798b5eb40b5747f43",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.0"
-            },
-            "require-dev": {
-                "monolog/monolog": "~1.0",
-                "phpunit/phpunit": "~4.0",
-                "satooshi/php-coveralls": "dev-master"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Vube\\Monolog\\Formatter\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Ross Perkins",
-                    "email": "ross@vubeology.com",
-                    "homepage": "http://code.vube.com/"
-                }
-            ],
-            "description": "Splunk Line Formatter for Monolog",
-            "time": "2015-05-22T18:59:18+00:00"
         }
     ],
     "packages-dev": [
