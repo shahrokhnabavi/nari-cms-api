@@ -17,4 +17,6 @@ if (extension_loaded('xdebug')) {
     ini_set("xdebug.var_display_max_depth", "-1");
 }
 
-require(__DIR__ . '/../vendor/autoload.php');
+define('APP_DIR', __DIR__ . '/..');
+
+require(APP_DIR . '/vendor/autoload.php');

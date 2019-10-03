@@ -1,0 +1,12 @@
+{
+  "environment": "development",
+  "logger": {
+    "name": "nari-api",
+    "path": "/etc/logs/log",
+    "level": "warning",
+    "papertrail":{
+      "hostname": "logs6.papertrailapp.com",
+      "port": 11752
+    }
+  }
+}

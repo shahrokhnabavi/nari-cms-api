@@ -25,6 +25,7 @@
     "ext-gettext": "*",
     "ext-json": "*",
     "ext-mbstring": "*",
+    "hassankhan/config": "^2.1",
     "justinrainbow/json-schema": "^5.2",
     "league/container": "^3.3",
     "monolog/monolog": "^2.0",

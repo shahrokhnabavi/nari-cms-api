@@ -6,6 +6,7 @@ namespace SiteApi\Infrastructure\Logging;
 use League\Container\Container;
 use League\Container\ServiceProvider\AbstractServiceProvider;
 use Psr\Log\LoggerInterface;
+use SiteApi\Infrastructure\Configuration\ConfigurationInterface;
 
 /**
  * @codeCoverageIgnore
@@ -13,7 +14,9 @@ use Psr\Log\LoggerInterface;
 final class LoggingServiceProvider extends AbstractServiceProvider
 {
     /** @var string[] */
-    protected $provides = [LoggerInterface::class];
+    protected $provides = [
+        LoggerInterface::class
+    ];
 
     /**
      * @return void
@@ -23,19 +26,24 @@ final class LoggingServiceProvider extends AbstractServiceProvider
         /** @var Container $container */
         $container = $this->getContainer();
 
-        $container->add(LoggerInterface::class, function () {
-            // TODO: add config service
-            $loggerFactory = new LoggerFactory('logger.name');
+        $container->add(LoggerInterface::class, function () use ($container): LoggerInterface {
+            $config = $container->get(ConfigurationInterface::class);
 
-            if ('environment' === 'development' || true) {
+            $loggerFactory = new LoggerFactory(
+                $config->get('logger.name')
+            );
+
+            if ($config->get('environment') === 'development') {
                 return $loggerFactory->createBasicFileLogger(
-                    'logger.path',
-                    'logger.level'
+                    APP_DIR . $config->get('logger.path'),
+                    $config->get('logger.level')
                 );
             }
 
             return $loggerFactory->createPaperTrailAppLogger(
-                'logger.hostname'
+                $config->get('logger.papertrail.hostname'),
+                $config->get('logger.papertrail.port'),
+                $config->get('logger.level')
             );
         });
     }

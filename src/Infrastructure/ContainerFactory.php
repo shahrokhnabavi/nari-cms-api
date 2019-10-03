@@ -5,6 +5,7 @@ namespace SiteApi\Infrastructure;
 
 use League\Container\Container;
 use Psr\Container\ContainerInterface;
+use SiteApi\Infrastructure\Configuration\ConfigurationServiceProvider;
 use SiteApi\Infrastructure\Logging\LoggingServiceProvider;
 use SiteApi\Infrastructure\Middleware\MiddlewareServiceProvider;
 
@@ -23,6 +24,7 @@ class ContainerFactory
         $container->addServiceProvider(SlimServiceProvider::class);
         $container->addServiceProvider(MiddlewareServiceProvider::class);
         $container->addServiceProvider(LoggingServiceProvider::class);
+        $container->addServiceProvider(ConfigurationServiceProvider::class);
 
         return $container;
     }
