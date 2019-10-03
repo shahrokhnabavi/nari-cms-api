@@ -34,6 +34,9 @@ class JsonValidationMiddlewareTest extends TestCase
 
     protected function setUp(): void
     {
+        if (!defined('APP_DIR')) {
+            define('APP_DIR', __DIR__ . '/../../../..');
+        }
         $this->route = $this->prophesize(Route::class);
 
         /** @var LoggerInterface $logger */
@@ -45,7 +48,7 @@ class JsonValidationMiddlewareTest extends TestCase
     public function testShouldReturnStatusCode200IfRequestBodyIsValid()
     {
         list($response, $request) = $this->generateRequirments([
-            'schema' => '../tests/data/schemas/unitTestSchema.json',
+            'schema' => '../../tests/data/schemas/unitTestSchema.json',
         ]);
 
         $newResponse = $this->jsonValidationMW->__invoke($request->reveal(), $response->reveal());
@@ -59,7 +62,7 @@ class JsonValidationMiddlewareTest extends TestCase
         $requestBody['height'] = 'Invalid Value';
 
         list($response, $request) = $this->generateRequirments([
-            'schema' => '../tests/data/schemas/unitTestSchema.json',
+            'schema' => '../../tests/data/schemas/unitTestSchema.json',
             'requestBody' => $requestBody,
         ]);
 
@@ -116,7 +119,7 @@ class JsonValidationMiddlewareTest extends TestCase
     public function testShouldThrowAnInvalidArgumentExceptionIfSchemaIsNotAValidJson()
     {
         list($response, $request) = $this->generateRequirments([
-            'schema' => '../tests/data/schemas/unitTestSchemaInvalid.json'
+            'schema' => '../../tests/data/schemas/unitTestSchemaInvalid.json'
         ]);
 
         $this->expectException(InvalidArgumentException::class);

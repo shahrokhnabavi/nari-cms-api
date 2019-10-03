@@ -3,5 +3,8 @@
 docker/data/*
 tests/tmp/
 
+etc/cache/*
+etc/logs/*
+
 vendor/
 node_modules/

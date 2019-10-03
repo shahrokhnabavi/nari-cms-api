@@ -17,7 +17,7 @@ use Slim\Routing\Route;
 class JsonValidationMiddleware
 {
     /** @var string */
-    const SHCEMA_DIR = '/../../../schemas/';
+    const SHCEMA_DIR = APP_DIR . '/etc/schemas/';
 
     /** @var Validator */
     private $validator;
@@ -88,7 +88,7 @@ class JsonValidationMiddleware
             throw new InvalidArgumentException('No schema defined for ' . $request->getUri());
         }
 
-        $schemaFile = __DIR__ . self::SHCEMA_DIR . $schemaName;
+        $schemaFile =  self::SHCEMA_DIR . $schemaName;
 
         if (!is_readable($schemaFile)) {
             throw new InvalidArgumentException('Schema file for ' . $request->getUri() . ' is not available');
