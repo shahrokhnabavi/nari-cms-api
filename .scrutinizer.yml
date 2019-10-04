@@ -26,6 +26,7 @@ build:
         analysis:
             tests:
                 override:
+                    - php-scrutinizer-run
                     - make php_lint
         tests_1:
             tests:
