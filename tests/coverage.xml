@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1570132045">
-  <project timestamp="1570132045">
+<coverage generated="1570214232">
+  <project timestamp="1570214232">
     <file name="/var/www/src/Core/IdentityInterface.php">
       <metrics loc="27" ncloc="13" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
     </file>
@@ -186,24 +186,19 @@
     <package name="SiteApi\Infrastructure\Middleware">
       <file name="/var/www/src/Infrastructure/Middleware/JsonBodyParserMiddleware.php">
         <class name="SiteApi\Infrastructure\Middleware\JsonBodyParserMiddleware" namespace="SiteApi\Infrastructure\Middleware">
-          <metrics complexity="4" methods="2" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="13" coveredstatements="0" elements="15" coveredelements="0"/>
+          <metrics complexity="4" methods="2" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="8" coveredstatements="8" elements="10" coveredelements="10"/>
         </class>
-        <line num="19" type="method" name="__construct" visibility="public" complexity="1" crap="2.00" count="0"/>
-        <line num="20" type="stmt" count="0"/>
-        <line num="21" type="stmt" count="0"/>
-        <line num="22" type="stmt" count="0"/>
-        <line num="30" type="method" name="process" visibility="public" complexity="3" crap="12.00" count="0"/>
-        <line num="31" type="stmt" count="0"/>
-        <line num="32" type="stmt" count="0"/>
-        <line num="34" type="stmt" count="0"/>
-        <line num="35" type="stmt" count="0"/>
-        <line num="36" type="stmt" count="0"/>
-        <line num="37" type="stmt" count="0"/>
-        <line num="38" type="stmt" count="0"/>
-        <line num="39" type="stmt" count="0"/>
-        <line num="41" type="stmt" count="0"/>
-        <line num="42" type="stmt" count="0"/>
-        <metrics loc="43" ncloc="33" classes="1" methods="2" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="13" coveredstatements="0" elements="15" coveredelements="0"/>
+        <line num="19" type="method" name="__construct" visibility="public" complexity="1" crap="1" count="3"/>
+        <line num="21" type="stmt" count="3"/>
+        <line num="22" type="stmt" count="3"/>
+        <line num="30" type="method" name="process" visibility="public" complexity="3" crap="3" count="3"/>
+        <line num="32" type="stmt" count="3"/>
+        <line num="34" type="stmt" count="3"/>
+        <line num="35" type="stmt" count="1"/>
+        <line num="36" type="stmt" count="1"/>
+        <line num="37" type="stmt" count="1"/>
+        <line num="41" type="stmt" count="3"/>
+        <metrics loc="43" ncloc="33" classes="1" methods="2" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="8" coveredstatements="8" elements="10" coveredelements="10"/>
       </file>
       <file name="/var/www/src/Infrastructure/Middleware/JsonValidationMiddleware.php">
         <class name="SiteApi\Infrastructure\Middleware\JsonValidationMiddleware" namespace="SiteApi\Infrastructure\Middleware">
@@ -256,6 +251,6 @@
         <metrics loc="41" ncloc="33" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
       </file>
     </package>
-    <metrics files="17" loc="747" ncloc="573" classes="8" methods="25" coveredmethods="17" conditionals="0" coveredconditionals="0" statements="120" coveredstatements="88" elements="145" coveredelements="105"/>
+    <metrics files="17" loc="747" ncloc="573" classes="8" methods="25" coveredmethods="19" conditionals="0" coveredconditionals="0" statements="115" coveredstatements="96" elements="140" coveredelements="115"/>
   </project>
 </coverage>
