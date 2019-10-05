@@ -32,10 +32,7 @@ class ErrorHandlingFactory
     {
         return function (
             ServerRequestInterface $request,
-            Throwable $exception,
-            bool $displayErrorDetails,
-            bool $logErrors,
-            bool $logErrorDetails
+            Throwable $exception
         ): ResponseInterface {
             $errorDetails = [
                 'errorCode' => $exception->getCode(),
@@ -61,7 +58,7 @@ class ErrorHandlingFactory
      */
     private function createPHPErrorHandler(): callable
     {
-        return function (int $errorNumber, string $error, string $file, int $line, array $context): bool {
+        return function (int $errorNumber, string $error, string $file, int $line): bool {
             if (!(error_reporting() & $errorNumber)) {
                 return false;
             }

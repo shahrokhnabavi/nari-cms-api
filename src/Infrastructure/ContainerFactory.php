@@ -9,6 +9,7 @@ use SiteApi\Infrastructure\Configuration\ConfigurationServiceProvider;
 use SiteApi\Infrastructure\ErrorHandling\ErrorHandlingServiceProvider;
 use SiteApi\Infrastructure\Logging\LoggingServiceProvider;
 use SiteApi\Infrastructure\Middleware\MiddlewareServiceProvider;
+use SiteApi\Infrastructure\Pdo\PdoServiceProvider;
 
 /**
  * @codeCoverageIgnore
@@ -26,6 +27,7 @@ class ContainerFactory
         $container->addServiceProvider(ConfigurationServiceProvider::class);
         $container->addServiceProvider(LoggingServiceProvider::class);
         $container->addServiceProvider(MiddlewareServiceProvider::class);
+        $container->addServiceProvider(PdoServiceProvider::class);
         $container->addServiceProvider(SlimServiceProvider::class);
 
         return $container;
