@@ -1,5 +1,17 @@
 {
   "environment": "development",
+  "db": {
+    "connections": {
+      "website": {
+        "dns": "mysql:host=site_api_mysql;dbname=web_db",
+        "credentials": {
+          "username": "devuser",
+          "password": "devpass",
+          "caFile": ""
+        }
+      }
+    }
+  },
   "logger": {
     "name": "nari-api",
     "path": "/etc/logs/log",

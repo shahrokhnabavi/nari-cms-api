@@ -240,7 +240,7 @@ RUN apk add --no-cache \
 	docker-php-ext-configure gd --with-png-dir=/usr --with-jpeg-dir=/usr --with-freetype-dir=/usr/include/; \
 	docker-php-ext-configure intl; \
 	docker-php-ext-configure gettext; \
-	docker-php-ext-install gd zip gettext intl sockets; \
+	docker-php-ext-install gd zip gettext intl sockets mysqli pdo pdo_mysql; \
     apk del build-base linux-headers pcre-dev openssl-dev; \
     rm -rf /var/cache/apk/*;
 
