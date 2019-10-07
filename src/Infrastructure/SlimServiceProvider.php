@@ -44,7 +44,7 @@ final class SlimServiceProvider extends AbstractServiceProvider
                 $errorMiddleware->setDefaultErrorHandler($errorHandlerFactory->createBasicExceptionErrorHandler());
             }
 
-            include APP_DIR . '/etc/routes/routes.php';
+            include APP_DIR . '/etc/routes/main.php';
 
             $app->addRoutingMiddleware();
             return $app;
