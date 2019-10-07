@@ -31,6 +31,7 @@ final class SlimServiceProvider extends AbstractServiceProvider
         $container = $this->getContainer();
 
         $container->add(App::class, function () use ($container): App {
+            AppFactory::setContainer($container);
             $app = AppFactory::create();
 
             $app->add($container->get(JsonValidationMiddleware::class));
