@@ -28,7 +28,7 @@ class PdoConnectionFactory
      * @param string $source
      *
      * @return PDO
-     * @throws InvalidArgumentException
+     * @throws PdoCredentialException
      */
     public function createConnectionBySource(string $source): PDO
     {
