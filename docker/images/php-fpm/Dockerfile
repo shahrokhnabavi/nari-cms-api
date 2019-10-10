@@ -251,10 +251,3 @@ RUN apk add --no-cache  autoconf g++ make; \
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer
 
 COPY xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
-
-#    rm -rf /tmp/pear
-#   && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-
-#ADD php.ini /usr/local/etc/php/
-
-USER www-data
