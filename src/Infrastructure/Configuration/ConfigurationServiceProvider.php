@@ -17,7 +17,7 @@ final class ConfigurationServiceProvider extends AbstractServiceProvider
 
     /** @var string[] */
     protected $provides = [
-        ConfigurationInterface::class
+        ConfigurationInterface::class,
     ];
 
     /**
@@ -30,7 +30,7 @@ final class ConfigurationServiceProvider extends AbstractServiceProvider
 
         $container->add(ConfigurationInterface::class, function (): ConfigurationInterface {
             return new ConfigurationAdapter(
-                Config::load(self::DIR . '/main.json')
+                Config::load(self::DIR . '/')
             );
         });
     }

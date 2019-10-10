@@ -25,20 +25,20 @@
     "ext-gettext": "*",
     "ext-json": "*",
     "ext-mbstring": "*",
+    "ext-pdo": "*",
     "hassankhan/config": "^2.1",
     "justinrainbow/json-schema": "^5.2",
     "league/container": "^3.3",
+    "league/tactician": "^1.0",
     "monolog/monolog": "^2.0",
     "psr/log": "^1.1",
     "slim/psr7": "^0.5.0",
-    "slim/slim": "4.0.0",
-    "ext-pdo": "*"
+    "slim/slim": "4.0.0"
   },
   "require-dev": {
     "phpunit/phpunit": "^8",
     "squizlabs/php_codesniffer": "^3.4",
-    "zircote/swagger-php": "^3.0",
-    "ext-http": "*"
+    "zircote/swagger-php": "^3.0"
   },
   "config": {
     "platform": {

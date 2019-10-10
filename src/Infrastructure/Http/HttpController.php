@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace SiteApi\Infrastructure\Http;
 
+use League\Tactician\CommandBus;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 
@@ -11,12 +12,16 @@ class HttpController
     /** @var ContainerInterface */
     private $container;
 
+    /** @var CommandBus */
+    protected $commandBus;
+
     /**
      * @param ContainerInterface $container
      */
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
+        $this->commandBus = $container->get(CommandBus::class);
     }
 
     /**
