@@ -2,4 +2,4 @@
 echo "DROP DATABASE IF EXISTS web_db;" | mysql -h 127.0.0.1 -u"root" -p"123"
 echo "CREATE DATABASE web_db;" | mysql -h 127.0.0.1 -u"root" -p"123"
 
-flyway -configFiles=etc/configs/flyway.conf migrate
+flyway -configFiles=etc/database/flyway.conf migrate

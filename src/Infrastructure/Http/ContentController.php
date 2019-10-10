@@ -5,6 +5,7 @@ namespace SiteApi\Infrastructure\Http;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use SiteApi\Application\Article\AddArticleCommand;
 
 class ContentController extends HttpController
 {
@@ -20,6 +21,14 @@ class ContentController extends HttpController
 
     public function create(ServerRequestInterface $request, ResponseInterface $response, $args)
     {
+        // Load payload
+        // do validation
+
+        $command = new AddArticleCommand('mola', 'rose', 'hora');
+        $this->commandBus->handle($command);
+
+        // handle errors
+
         return $this->html($response, 'create');
     }
 

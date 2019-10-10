@@ -239,9 +239,11 @@ RUN apk add --no-cache \
 	    libpng-dev; \
 	docker-php-ext-configure gd --with-png-dir=/usr --with-jpeg-dir=/usr --with-freetype-dir=/usr/include/; \
 	docker-php-ext-configure intl; \
-	docker-php-ext-configure gettext; \
-	docker-php-ext-install gd zip gettext intl sockets mysqli pdo pdo_mysql; \
-    apk del build-base linux-headers pcre-dev openssl-dev; \
+	docker-php-ext-configure gettext;
+
+RUN docker-php-ext-install gd zip gettext intl sockets mysqli pdo pdo_mysql;
+
+RUN apk del build-base linux-headers pcre-dev openssl-dev; \
     rm -rf /var/cache/apk/*;
 
 RUN apk add --no-cache  autoconf g++ make; \
