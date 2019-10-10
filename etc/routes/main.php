@@ -14,8 +14,8 @@ $app->get('/', function (Request $request, Response $response, array $args) {
     $response->getBody()->write($payload);
 
     /** @var PdoConnectionFactory $pdoConnection */
-    $pdoConnection = $this->container->get(PdoConnectionFactory::class);
-    $pdo = $pdoConnection->createConnectionBySource('website');
+//    $pdoConnection = $this->container->get(PdoConnectionFactory::class);
+//    $pdo = $pdoConnection->createConnectionBySource('website');
 
     return $response->withHeader('Content-Type', 'application/json');
 });

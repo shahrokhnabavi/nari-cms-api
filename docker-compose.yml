@@ -46,9 +46,12 @@ services:
         networks:
             - site_api_network
         ports:
-            - "3306:3306"
+            - "9906:3306"
         volumes:
             - ./docker/data/mysql:/var/lib/mysql
+            - ./:/opt
+            - ./docker/images/mysql:/etc/mysql
+        working_dir: /opt
 
 networks:
     site_api_network:

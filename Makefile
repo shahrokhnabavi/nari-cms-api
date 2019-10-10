@@ -22,8 +22,10 @@ endif
 
 ifeq ($(DOCKER),true)
 	START_COMMAND := docker-compose exec site_api_php
+	DB_COMMAND := docker-compose exec site_api_mysql
 else
 	START_COMMAND :=
+	DB_COMMAND :=
 endif
 
 NODE_MODULES := ./node_modules/.bin
@@ -65,3 +67,7 @@ test_acceptance: ## Run all acceptance test
 .PHONY: test_unit
 test_unit: ## Run all unit tests
 	${START_COMMAND} php ${VENDOR}/phpunit -c phpunit.xml --testsuite Units
+
+.PHONY: init_mysql
+init_mysql: ## initialize the mysql database
+	${DB_COMMAND} ./scripts/initialize_mysql
