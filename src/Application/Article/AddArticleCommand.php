@@ -8,6 +8,9 @@ use SiteApi\Application\CommandBus\Command;
 class AddArticleCommand extends Command
 {
     /** @var string */
+    private $id;
+
+    /** @var string */
     private $title;
 
     /** @var string */
@@ -17,15 +20,25 @@ class AddArticleCommand extends Command
     private $author;
 
     /**
+     * @param string $id
      * @param string $title
      * @param string $text
      * @param string $author
      */
-    public function __construct(string $title, string $text, string $author)
+    public function __construct(string $id, string $title, string $text, string $author)
     {
+        $this->id = $id;
         $this->title = $title;
         $this->text = $text;
         $this->author = $author;
+    }
+
+    /**
+     * @return string
+     */
+    public function getId(): string
+    {
+        return $this->id;
     }
 
     /**

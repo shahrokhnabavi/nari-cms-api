@@ -41,4 +41,12 @@ class UUIDTest extends TestCase
 
         $this->assertFalse($uuid1->equals($uuid2));
     }
+
+    public function testShouldGenerateNewUuidIfThereIsNoIdentifierPresent()
+    {
+        $uuid = Uuid::create();
+
+        $this->assertNotEquals('', (string)$uuid);
+        $this->assertRegExp(UUID::PATTERN, (string)$uuid);
+    }
 }
