@@ -43,12 +43,9 @@ class JsonValidationMiddleware
      */
     public function __invoke(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        /** @var ResponseInterface $response */
-        $response = $handler->handle($request);
-
         $method = $request->getMethod();
         if ($method === 'GET' || $method === 'DELETE') {
-            return $response;
+            return $handler->handle($request);
         }
 
         if (!$this->validateRequest($request)) {
@@ -65,7 +62,7 @@ class JsonValidationMiddleware
             return $response->withHeader('Content-Type', 'application/json')->withStatus(400);
         }
 
-        return $response;
+        return $handler->handle($request);
     }
 
     /**

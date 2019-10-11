@@ -32,6 +32,7 @@
     "league/tactician": "^1.0",
     "monolog/monolog": "^2.0",
     "psr/log": "^1.1",
+    "ramsey/uuid": "^3.8",
     "slim/psr7": "^0.5.0",
     "slim/slim": "4.0.0"
   },

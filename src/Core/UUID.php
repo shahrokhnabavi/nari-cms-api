@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace SiteApi\Core;
 
 use Exception;
+use Ramsey\Uuid\Uuid as RamsyUUID;
 
 class UUID implements IdentityInterface
 {
@@ -13,8 +14,17 @@ class UUID implements IdentityInterface
     /** @var string */
     private $identifier;
 
+    /**
+     * @param string $identifier
+     *
+     * @throws Exception
+     */
     public function __construct(string $identifier)
     {
+        if (!$this->isValid($identifier)) {
+            InvalidIdentityException::throw("Given string '{$identifier}' is not a valid UUID");
+        }
+
         $this->identifier = $identifier;
     }
 
@@ -51,10 +61,25 @@ class UUID implements IdentityInterface
      */
     public static function fromString(string $identifier): self
     {
-        if (preg_match(static::PATTERN, $identifier) !== 1) {
-            InvalidIdentityException::throw("Given string '{$identifier}' is not a valid UUID");
-        }
-
         return new static($identifier);
+    }
+
+    /**
+     * @return UUID
+     * @throws Exception
+     */
+    public static function create(): self
+    {
+        return new static(RamsyUUID::uuid1()->toString());
+    }
+
+    /**
+     * @param string $identifier
+     *
+     * @return bool
+     */
+    private function isValid(string $identifier): bool
+    {
+        return preg_match(static::PATTERN, $identifier) === 1;
     }
 }

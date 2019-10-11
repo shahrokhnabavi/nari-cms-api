@@ -3,21 +3,22 @@
   "description": "This is a schema that is used by unit test. Read more: https://json-schema.org/understanding-json-schema",
   "type": "object",
   "properties": {
-    "name": {
+    "title": {
       "type": "string"
     },
-    "age": {
-      "type": "integer"
+    "text": {
+      "type": "string"
     },
-    "height": {
-      "type": "number"
+    "author": {
+      "type": "string"
     },
-    "skills": {
+    "tags": {
       "type": "array",
       "uniqueItems": true,
       "items": {
         "type": "string"
       }
     }
-  }
+  },
+  "required": ["title"]
 }

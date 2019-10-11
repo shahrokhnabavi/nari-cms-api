@@ -3,9 +3,12 @@ declare(strict_types = 1);
 
 namespace SiteApi\Infrastructure\Http;
 
+use Exception;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use SiteApi\Application\Article\AddArticleCommand;
+use SiteApi\Application\Article\AddTagsToArticleCommand;
+use SiteApi\Core\UUID;
 
 class ContentController extends HttpController
 {
@@ -19,17 +22,38 @@ class ContentController extends HttpController
         return $this->html($response, 'get');
     }
 
-    public function create(ServerRequestInterface $request, ResponseInterface $response, $args)
+    /**
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
+     * @param mixed[] $args
+     *
+     * @return ResponseInterface
+     * @throws Exception
+     */
+    public function create(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
-        // Load payload
+        $params = $request->getParsedBody();
+
         // do validation
 
-        $command = new AddArticleCommand('mola', 'rose', 'hora');
-        $this->commandBus->handle($command);
+        $identifier = (string)UUID::create();
+
+        $articleCommand = new AddArticleCommand(
+            $identifier,
+            $params['title'],
+            $params['text'] ?? '',
+            $params['author'] ?? ''
+        );
+        $this->commandBus->handle($articleCommand);
+
+        if (isset($params['tags']) && count($params['tags']) > 0) {
+            $tagsCommand = new AddTagsToArticleCommand($identifier, $params['tags']);
+            $this->commandBus->handle($tagsCommand);
+        }
 
         // handle errors
 
-        return $this->html($response, 'create');
+        return $this->html($response, 'create: ' . $identifier);
     }
 
     public function edit(ServerRequestInterface $request, ResponseInterface $response, $args)

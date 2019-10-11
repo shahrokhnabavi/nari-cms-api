@@ -17,7 +17,7 @@ class ErrorHandlingFactoryTest extends TestCase
     private $errorHandlingFactory;
 
     /** @var TestHandler */
-    private $testHandler;
+    private $testLogHandler;
 
     protected function setUp(): void
     {
@@ -25,7 +25,7 @@ class ErrorHandlingFactoryTest extends TestCase
         $logger = new Logger('shah');
         $logger->pushHandler($hdl);
 
-        $this->testHandler = $hdl;
+        $this->testLogHandler = $hdl;
         $this->errorHandlingFactory = new ErrorHandlingFactory($logger);
     }
 
@@ -33,7 +33,7 @@ class ErrorHandlingFactoryTest extends TestCase
     {
         \trigger_error('foo', E_USER_ERROR);
 
-        $errorLogs = $this->testHandler->getRecords();
+        $errorLogs = $this->testLogHandler->getRecords();
         $this->assertCount(1, $errorLogs);
         $this->assertEquals(400, $errorLogs[0]['level']);
         $this->assertEquals('ERROR', $errorLogs[0]['level_name']);
@@ -63,7 +63,7 @@ class ErrorHandlingFactoryTest extends TestCase
         $this->assertEquals('text/html', $response->getHeaderLine('Content-Type'));
 
 
-        $errorLogs = $this->testHandler->getRecords();
+        $errorLogs = $this->testLogHandler->getRecords();
         $this->assertStringContainsString('error', $errorLogs[0]['message']);
         $this->assertStringContainsString( 'localhost', $errorLogs[0]['context']['requestUri']);
     }
@@ -74,7 +74,7 @@ class ErrorHandlingFactoryTest extends TestCase
 
         $exceptionHandler(new \Exception('error', 200));
 
-        $errorLogs = $this->testHandler->getRecords();
+        $errorLogs = $this->testLogHandler->getRecords();
         $this->assertCount(1, $errorLogs);
         $this->assertEquals(400, $errorLogs[0]['level']);
         $this->assertEquals('ERROR', $errorLogs[0]['level_name']);

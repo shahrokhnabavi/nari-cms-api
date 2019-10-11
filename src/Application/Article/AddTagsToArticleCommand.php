@@ -7,26 +7,26 @@ use SiteApi\Application\CommandBus\Command;
 
 class AddTagsToArticleCommand extends Command
 {
-    /** @var int */
+    /** @var string */
     private $articleId;
 
     /** @var array */
     private $tagIds;
 
     /**
-     * @param int $articleId
+     * @param string $articleId
      * @param array $tagIds
      */
-    public function __construct(int $articleId, array $tagIds)
+    public function __construct(string $articleId, array $tagIds)
     {
         $this->articleId = $articleId;
         $this->tagIds = $tagIds;
     }
 
     /**
-     * @return int
+     * @return string
      */
-    public function getArticleId(): int
+    public function getArticleId(): string
     {
         return $this->articleId;
     }
