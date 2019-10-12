@@ -7,6 +7,7 @@ use Monolog\Handler\TestHandler;
 use Monolog\Logger;
 use SiteApi\Application\Article\AddArticleCommand;
 use SiteApi\Application\CommandBus\Command;
+use SiteApi\Core\UUID;
 use SiteApi\Infrastructure\CommandBus\LoggingMiddleware;
 use PHPUnit\Framework\TestCase;
 use SiteApi\Infrastructure\ErrorHandling\ErrorHandlingFactory;
@@ -35,7 +36,7 @@ class LoggingMiddlewareTest extends TestCase
 
     public function testShouldSeeCommandMiddlewareWriteToLogHandler()
     {
-        $command = new AddArticleCommand('','','','');
+        $command = new AddArticleCommand(UUID::create(),'','','',[]);
         $this->loggingMiddleware->execute($command, function ($command) {
             $this->assertInstanceOf(AddArticleCommand::class, $command);
         });

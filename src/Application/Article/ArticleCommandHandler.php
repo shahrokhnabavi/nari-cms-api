@@ -3,26 +3,22 @@ declare(strict_types = 1);
 
 namespace SiteApi\Application\Article;
 
-use PDO;
-use PDOException;
+use Exception;
 use SiteApi\Application\CommandBus\CommandHandlerInterface;
-use SiteApi\Domain\Article\ArticleAlreadyExistsException;
-use SiteApi\Infrastructure\Pdo\PdoConnectionFactory;
-use SiteApi\Infrastructure\Pdo\PdoCredentialException;
+use SiteApi\Domain\Article\Article;
+use SiteApi\Infrastructure\Article\PdoArticleRepository;
 
 class ArticleCommandHandler implements CommandHandlerInterface
 {
-    /** @var PDO */
-    private $pdo;
+    /** @var PdoArticleRepository */
+    private $repository;
 
     /**
-     * @param PdoConnectionFactory $pdo
-     *
-     * @throws PdoCredentialException
+     * @param PdoArticleRepository $repository
      */
-    public function __construct(PdoConnectionFactory $pdo)
+    public function __construct(PdoArticleRepository $repository)
     {
-        $this->pdo = $pdo->createConnectionBySource('website');
+        $this->repository = $repository;
     }
 
     /**
@@ -40,55 +36,26 @@ class ArticleCommandHandler implements CommandHandlerInterface
      * @param AddArticleCommand $articleCommand
      *
      * @return void
-     * @throws ArticleAlreadyExistsException
+     * @throws Exception
      */
     public function handleAddArticleCommand(AddArticleCommand $articleCommand): void
     {
-        $statement = $this->pdo->prepare('SELECT COUNT(*) FROM articles WHERE title = :title');
-        $statement->execute([':title' => $articleCommand->getTitle()]);
-
-        if ($statement->fetchColumn() > 0) {
-            throw ArticleAlreadyExistsException::causedBy(
-                sprintf('Article with the title "%s" already exists', $articleCommand->getTitle())
-            );
-        }
-
-        try {
-            $statement = $this->pdo->prepare(
-                'INSERT INTO articles (article_id, title, text, author) VALUES (:id, :title, :text, :author)'
-            );
-
-            $statement->execute([
-                ':id' => $articleCommand->getId(),
-                ':title' => $articleCommand->getTitle(),
-                ':text' => $articleCommand->getText(),
-                ':author' => $articleCommand->getAuthor(),
-            ]);
-        } catch (PDOException $exception) {
-            // log
-        }
+        $this->repository->createArticleTransaction(
+            new Article($articleCommand->toArray())
+        );
     }
 
     /**
      * @param AddTagsToArticleCommand $articleCommand
      *
      * @return void
+     * @throws Exception
      */
     public function handleAddTagsToArticleCommand(AddTagsToArticleCommand $articleCommand): void
     {
-        $this->pdo->beginTransaction();
-
-        foreach ($articleCommand->getTagIds() as $tagId) {
-            $statment = $this->pdo->prepare('
-                INSERT INTO articles_tags (`article_id`, `tag_id`) VALUE (:articleId, :tagId)
-            ');
-
-            $statment->execute([
-                ':articleId' => $articleCommand->getArticleId(),
-                ':tagId' => $tagId
-            ]);
-        }
-
-        $this->pdo->commit();
+        $this->repository->tagRepository()->addTagsToArticle(
+            $articleCommand->getArticleId(),
+            $articleCommand->getTags()
+        );
     }
 }

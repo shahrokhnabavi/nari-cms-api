@@ -4,12 +4,12 @@ declare(strict_types = 1);
 namespace Tests\Units\Infrastructure\Pdo;
 
 use InvalidArgumentException;
-use PDO;
 use PDOException;
 use SiteApi\Infrastructure\Pdo\PdoConnectionFactory;
 use PHPUnit\Framework\TestCase;
 use SiteApi\Infrastructure\Pdo\PdoCredentials;
 use SiteApi\Infrastructure\Pdo\PdoCredentialsManager;
+use SiteApi\Infrastructure\Pdo\WebsitePDO;
 
 class PdoConnectionFactoryTest extends TestCase
 {
@@ -25,7 +25,7 @@ class PdoConnectionFactoryTest extends TestCase
 
         $pdo = $pdoConnectionFactory->createConnectionBySource('shop');
 
-        $this->assertInstanceOf(PDO::class, $pdo);
+        $this->assertInstanceOf(WebsitePDO::class, $pdo);
     }
 
     public function testShouldSeeInvalidArgumentException()
