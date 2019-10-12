@@ -9,12 +9,14 @@ use Prophecy\Argument;
 use Prophecy\Prophecy\MethodProphecy;
 use Prophecy\Prophecy\ObjectProphecy;
 use SiteApi\Application\Article\AddArticleCommand;
-use SiteApi\Application\Article\AddTagsToArticleCommand;
+use SiteApi\Application\Article\AddTagToArticleCommand;
 use SiteApi\Application\Article\ArticleCommandHandler;
 use PHPUnit\Framework\TestCase;
+use SiteApi\Application\Article\EditArticleCommand;
+use SiteApi\Application\Article\RemoveArticleCommand;
+use SiteApi\Application\Article\RemoveTagFromArticleCommand;
 use SiteApi\Core\UUID;
 use SiteApi\Domain\Article\ArticleAlreadyExistsException;
-use SiteApi\Domain\Tags\Tag;
 use SiteApi\Infrastructure\Article\PdoArticleRepository;
 use SiteApi\Infrastructure\Pdo\PdoConnectionFactory;
 use SiteApi\Infrastructure\Pdo\PdoCredentialException;
@@ -57,6 +59,7 @@ class ArticleCommandHandlerTest extends TestCase
     {
         $this->statement = $this->prophesize(PDOStatement::class);
         $this->statement->fetch()->willReturn([]);
+        $this->statement->fetchColumn()->willReturn(0);
         $this->statement->execute(Argument::any())->willReturn(null);
 
         $this->pdo = $this->prophesize(WebsitePDO::class);
@@ -64,13 +67,13 @@ class ArticleCommandHandlerTest extends TestCase
         $this->pdo->beginTransaction()->willReturn(true);
         $this->pdo->inTransaction()->willReturn(false);
         $this->pdo->commit()->willReturn(true);
+        $this->pdo->rollBack()->willReturn(true);
 
         $this->pdoConnection = $this->prophesize(PdoConnectionFactory::class);
         $this->pdoConnection->createConnectionBySource('website')->willReturn($this->pdo->reveal());
 
         /** @var PdoConnectionFactory $pdoConnection */
         $pdoConnection = $this->pdoConnection->reveal();
-
 
         $articleRepo = new PdoArticleRepository($pdoConnection);
 
@@ -88,13 +91,14 @@ class ArticleCommandHandlerTest extends TestCase
 
         $this->statement->execute(Argument::any())->will(function ($args, ObjectProphecy $mock, MethodProphecy $methodProphecy) use ($self) {
             $arguments = $args[0];
-            $self->assertEquals($self->article['title'], $arguments[':title']);
 
             switch ($self->methodCalls($mock, $methodProphecy)) {
                 case 0:
+                    $self->assertEquals($self->article['title'], $arguments[':value']);
                     $self->assertCount(1, $arguments);
                     break;
-                case 1:
+                case 2:
+                    $self->assertEquals($self->article['title'], $arguments[':title']);
                     $self->assertCount(4, $arguments);
                     $self->assertEquals($self->article['text'], $arguments[':text']);
                     $self->assertEquals($self->article['author'], $arguments[':author']);
@@ -115,7 +119,7 @@ class ArticleCommandHandlerTest extends TestCase
     {
         $uuid = UUID::create();
         $this->article['identifier'] = $uuid;
-        $this->statement->fetch()->willReturn($this->article);
+        $this->statement->fetchColumn()->willReturn(1);
 
         $this->expectException(ArticleAlreadyExistsException::class);
 
@@ -148,45 +152,47 @@ class ArticleCommandHandlerTest extends TestCase
     public function testShouldHandleTheAddTagsToArticleCommandToSeeArticleInDatabase()
     {
         $self = $this;
-        $uuids = [
-            UUID::create(),
-            UUID::create(),
-            UUID::create()
-        ];
+        $articleId = UUID::create();
+        $tagId = UUID::create();
 
         $this->statement->fetch()->willReturn([
-            'identifier' => (string)$uuids[1],
+            'identifier' => $tagId,
             'name' => 'php'
         ], []);
-        $this->statement->execute(Argument::any())->will(function ($args, ObjectProphecy $mock, MethodProphecy $methodProphecy) use ($self, $uuids) {
+        $this->statement->execute(Argument::any())->will(function ($args, ObjectProphecy $mock, MethodProphecy $methodProphecy) use ($self, $articleId, &$tagId) {
             $arguments = $args[0];
             switch ($self->methodCalls($mock, $methodProphecy)) {
                 case 0:
+                    $self->assertCount(1, $arguments);
                     return true;
                 case 1:
                     $self->assertEquals([
-                        ':articleId' => (string)$uuids[0],
-                        ':tagId' => (string)$uuids[1]
+                        ':articleId' => (string)$articleId,
+                        ':tagId' => (string)$tagId
                     ], $arguments);
                     break;
                 case 2:
                     return false;
                 case 3:
+                    $tagId = $arguments[':tagId'];
+                    $self->assertCount(2, $arguments);
+                    $self->assertEquals('java', $arguments[':tagName']);
                     return true;
                 case 4:
                     $self->assertEquals([
-                        ':articleId' => (string)$uuids[0],
-                        ':tagId' => (string)$uuids[2]
+                        ':articleId' => (string)$articleId,
+                        ':tagId' => (string)$tagId
                     ], $arguments);
+                    return true;
                     break;
             };
         });
 
-        $this->handler->handleAddTagsToArticleCommand(
-            new AddTagsToArticleCommand($uuids[0], [
-                new Tag(['identifier' => $uuids[1], 'name' => 'php']),
-                new Tag(['identifier' => $uuids[2], 'name' => 'java']),
-            ])
+        $this->handler->handleAddTagToArticleCommand(
+            new AddTagToArticleCommand($articleId,'php')
+        );
+        $this->handler->handleAddTagToArticleCommand(
+            new AddTagToArticleCommand($articleId,'java')
         );
     }
 
@@ -194,9 +200,12 @@ class ArticleCommandHandlerTest extends TestCase
     {
         $commands = ArticleCommandHandler::handlesCommand();
 
-        $this->assertCount(2, $commands);
+        $this->assertCount(5, $commands);
         $this->assertEquals(AddArticleCommand::class, $commands[0]);
-        $this->assertEquals(AddTagsToArticleCommand::class, $commands[1]);
+        $this->assertEquals(AddTagToArticleCommand::class, $commands[1]);
+        $this->assertEquals(EditArticleCommand::class, $commands[2]);
+        $this->assertEquals(RemoveArticleCommand::class, $commands[3]);
+        $this->assertEquals(RemoveTagFromArticleCommand::class, $commands[4]);
     }
 
     /**

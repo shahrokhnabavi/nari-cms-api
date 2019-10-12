@@ -16,14 +16,14 @@ class WebsitePDO extends PDO
 
     public function rollBack()
     {
-        if (!$this->inTransaction()) {
+        if ($this->inTransaction()) {
             parent::rollBack();
         }
     }
 
     public function commit()
     {
-        if (!$this->inTransaction()) {
+        if ($this->inTransaction()) {
             parent::commit();
         }
     }

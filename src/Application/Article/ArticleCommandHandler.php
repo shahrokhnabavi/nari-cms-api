@@ -3,10 +3,11 @@ declare(strict_types = 1);
 
 namespace SiteApi\Application\Article;
 
-use Exception;
 use SiteApi\Application\CommandBus\CommandHandlerInterface;
-use SiteApi\Domain\Article\Article;
+use SiteApi\Domain\Article\ArticleAlreadyExistsException;
+use SiteApi\Domain\Article\ArticleNotFoundException;
 use SiteApi\Infrastructure\Article\PdoArticleRepository;
+use SiteApi\Infrastructure\Article\PdoRepositoryException;
 
 class ArticleCommandHandler implements CommandHandlerInterface
 {
@@ -28,34 +29,85 @@ class ArticleCommandHandler implements CommandHandlerInterface
     {
         return [
             AddArticleCommand::class,
-            AddTagsToArticleCommand::class,
+            AddTagToArticleCommand::class,
+            EditArticleCommand::class,
+            RemoveArticleCommand::class,
+            RemoveTagFromArticleCommand::class,
         ];
     }
 
     /**
-     * @param AddArticleCommand $articleCommand
+     * @param AddArticleCommand $command
      *
      * @return void
-     * @throws Exception
+     * @throws ArticleAlreadyExistsException
+     * @throws PdoRepositoryException
      */
-    public function handleAddArticleCommand(AddArticleCommand $articleCommand): void
+    public function handleAddArticleCommand(AddArticleCommand $command): void
     {
-        $this->repository->createArticleTransaction(
-            new Article($articleCommand->toArray())
+        $this->repository->addArticle(
+            $command->getIdentifier(),
+            $command->getTitle(),
+            $command->getText(),
+            $command->getAuthor(),
+            $command->getTags()
         );
     }
 
     /**
-     * @param AddTagsToArticleCommand $articleCommand
+     * @param AddTagToArticleCommand $command
      *
      * @return void
-     * @throws Exception
+     * @throws PdoRepositoryException
      */
-    public function handleAddTagsToArticleCommand(AddTagsToArticleCommand $articleCommand): void
+    public function handleAddTagToArticleCommand(AddTagToArticleCommand $command): void
     {
-        $this->repository->tagRepository()->addTagsToArticle(
-            $articleCommand->getArticleId(),
-            $articleCommand->getTags()
+        $this->repository->tags()->addTagToArticle(
+            $command->getArticleId(),
+            $command->getTagName()
+        );
+    }
+
+    /**
+     * @param RemoveArticleCommand $command
+     *
+     * @return void
+     * @throws PdoRepositoryException
+     * @throws ArticleNotFoundException
+     */
+    public function handleRemoveArticleCommand(RemoveArticleCommand $command): void
+    {
+        $this->repository->deleteArticle($command->getIdentifier());
+    }
+
+    /**
+     * @param EditArticleCommand $command
+     *
+     * @return void
+     * @throws PdoRepositoryException
+     */
+    public function handleEditArticleCommand(EditArticleCommand $command): void
+    {
+        $this->repository->editArticle(
+            $command->getIdentifier(),
+            $command->getTitle(),
+            $command->getText(),
+            $command->getAuthor()
+        );
+    }
+
+    /**
+     * @param RemoveTagFromArticleCommand $command
+     *
+     * @return void
+     * @throws PdoRepositoryException
+     * @throws ArticleNotFoundException
+     */
+    public function handleRemoveTagFromArticleCommand(RemoveTagFromArticleCommand $command): void
+    {
+        $this->repository->tags()->removeTagFromArticle(
+            $command->getArticleId(),
+            $command->getTagId()
         );
     }
 }

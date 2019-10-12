@@ -1,0 +1,18 @@
+{
+  "title": "Edit article schema",
+  "description": "This schema is used by EditArticle end-point. Read more: https://json-schema.org/understanding-json-schema",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "minLength": 5
+    },
+    "text": {
+      "type": "string"
+    },
+    "author": {
+      "type": "string"
+    }
+  },
+  "required": ["title"]
+}
