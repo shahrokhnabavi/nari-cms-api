@@ -5,9 +5,10 @@ namespace SiteApi\Domain\Tags;
 
 use Exception;
 use InvalidArgumentException;
+use JsonSerializable;
 use SiteApi\Core\UUID;
 
-class Tag
+class Tag implements JsonSerializable
 {
     /** @var UUID */
     private $identifier;
@@ -52,5 +53,16 @@ class Tag
     public function getIdentifier(): UUID
     {
         return $this->identifier;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function jsonSerialize()
+    {
+        return [
+            'identifier' => (string)$this->identifier,
+            'name' => $this->name
+        ];
     }
 }

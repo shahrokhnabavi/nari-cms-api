@@ -26,36 +26,72 @@ class PdoTagRepository
     }
 
     /**
-     * @param UUID $articleIdentifier
-     * @param array $tags
+     * @param UUID $articleId
+     * @param mixed[] $tags
      *
      * @return void
-     * @throws Exception
+     * @throws PdoRepositoryException
      */
-    public function addTagsToArticle(UUID $articleIdentifier, array $tags): void
+    public function addTagsToArticle(UUID $articleId, array $tags): void
     {
         $this->pdo->beginTransaction();
         try {
             /** @var Tag $tag */
             foreach ($tags as $tag) {
-                $existedTag = $this->getTagByName($tag->getName());
-
-                $tagId = $existedTag ? $existedTag->getIdentifier() : $this->createTag($tag);
-
-                $statement = $this->pdo->prepare('
-                    INSERT INTO articles_tags (`article_id`, `tag_id`) VALUE (:articleId, :tagId)
-                ');
-
-                $statement->execute([
-                    ':articleId' => (string)$articleIdentifier,
-                    ':tagId' => (string)$tagId,
-                ]);
+                $this->attachTagToArticle(
+                    $articleId,
+                    $this->addTag($tag['name'])
+                );
             }
 
             $this->pdo->commit();
         } catch (Exception $exception) {
             $this->pdo->rollBack();
-            throw new Exception($exception->getMessage());
+            throw PdoRepositoryException::causedBy($exception->getMessage());
+        }
+    }
+
+    /**
+     * @param UUID $articleId
+     * @param string $tag
+     *
+     * @throws PdoRepositoryException
+     */
+    public function addTagToArticle(UUID $articleId, string $tag): void
+    {
+        $this->pdo->beginTransaction();
+        try {
+            $this->attachTagToArticle(
+                $articleId,
+                $this->addTag($tag)
+            );
+
+            $this->pdo->commit();
+        } catch (Exception $exception) {
+            $this->pdo->rollBack();
+            throw PdoRepositoryException::causedBy($exception->getMessage());
+        }
+    }
+
+    /**
+     * @param UUID $articleId
+     * @param UUID $tagId
+     *
+     * @throws PdoRepositoryException
+     */
+    public function removeTagFromArticle(UUID $articleId, UUID $tagId): void
+    {
+        try {
+            $statement = $this->pdo->prepare('
+                DELETE FROM articles_tags WHERE `article_id` = :articleId AND `tag_id` = :tagId
+            ');
+
+            $statement->execute([
+                ':articleId' => (string)$articleId,
+                ':tagId' => (string)$tagId,
+            ]);
+        } catch (Exception $exception) {
+            throw PdoRepositoryException::causedBy($exception->getMessage());
         }
     }
 
@@ -70,7 +106,7 @@ class PdoTagRepository
         $statement = $this->pdo->prepare('
             SELECT tag_id as identifier, name FROM tags WHERE name = :name
         ');
-        $statement->execute([':name' => $name]);
+        $statement->execute([':name' => strtolower($name)]);
 
         $row = $statement->fetch();
         if (!$row) {
@@ -81,21 +117,50 @@ class PdoTagRepository
     }
 
     /**
-     * @param Tag $tag
+     * @param string $name
      *
      * @return UUID
+     * @throws Exception
      */
-    public function createTag(Tag $tag): UUID
+    public function addTag(string $name): UUID
     {
+        if ($tag = $this->getTagByName($name)) {
+            return $tag->getIdentifier();
+        }
+
+        $identifier = UUID::create();
+
         $statement = $this->pdo->prepare('
             INSERT INTO tags (`tag_id`, `name`) VALUE (:tagId, :tagName)
         ');
 
         $statement->execute([
-            ':tagId' => (string)$tag->getIdentifier(),
-            ':tagName' => $tag->getName(),
+            ':tagId' => $identifier,
+            ':tagName' => strtolower($name),
         ]);
 
-        return $tag->getIdentifier();
+        return $identifier;
+    }
+
+    /**
+     * @param UUID $articleId
+     * @param UUID $tagId
+     *
+     * @throws PdoRepositoryException
+     */
+    private function attachTagToArticle(UUID $articleId, UUID $tagId): void
+    {
+        try {
+            $statement = $this->pdo->prepare('
+                INSERT INTO articles_tags (`article_id`, `tag_id`) VALUE (:articleId, :tagId)
+            ');
+
+            $statement->execute([
+                ':articleId' => (string)$articleId,
+                ':tagId' => (string)$tagId,
+            ]);
+        } catch (Exception $exception) {
+            throw PdoRepositoryException::causedBy('The tag already assigned to the article.');
+        }
     }
 }

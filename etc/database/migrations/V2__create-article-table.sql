@@ -18,8 +18,8 @@ CREATE TABLE articles_tags
     article_id VARCHAR(36) NOT NULL,
     tag_id     VARCHAR(36) NOT NULL,
     PRIMARY KEY (article_id, tag_id),
-    CONSTRAINT fk_article_article_tag FOREIGN KEY (article_id) REFERENCES articles (article_id),
-    CONSTRAINT fk_tag_article_tag FOREIGN KEY (tag_id) REFERENCES tags (tag_id)
+    CONSTRAINT fk_article_article_tag FOREIGN KEY (article_id) REFERENCES articles (article_id) ON DELETE CASCADE,
+    CONSTRAINT fk_tag_article_tag FOREIGN KEY (tag_id) REFERENCES tags (tag_id) ON DELETE CASCADE
 );
 
 INSERT INTO articles_tags

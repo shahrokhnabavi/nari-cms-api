@@ -5,24 +5,23 @@ namespace SiteApi\Application\Article;
 
 use SiteApi\Application\CommandBus\Command;
 use SiteApi\Core\UUID;
-use SiteApi\Domain\Tags\Tag;
 
-class AddTagsToArticleCommand extends Command
+class AddTagToArticleCommand extends Command
 {
     /** @var UUID */
     private $articleId;
 
-    /** @var Tag[] */
-    private $tagIds;
+    /** @var string */
+    private $tagName;
 
     /**
      * @param UUID $articleId
-     * @param Tag[] $tagIds
+     * @param string $tagName
      */
-    public function __construct(UUID $articleId, array $tagIds)
+    public function __construct(UUID $articleId, string $tagName)
     {
         $this->articleId = $articleId;
-        $this->tagIds = $tagIds;
+        $this->tagName = $tagName;
     }
 
     /**
@@ -34,10 +33,10 @@ class AddTagsToArticleCommand extends Command
     }
 
     /**
-     * @return Tag[]
+     * @return string
      */
-    public function getTags(): array
+    public function getTagName(): string
     {
-        return $this->tagIds;
+        return $this->tagName;
     }
 }

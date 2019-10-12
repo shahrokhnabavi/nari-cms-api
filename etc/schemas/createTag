@@ -1,0 +1,12 @@
+{
+  "title": "Add tag schema",
+  "description": "This schema is used by Add Tag end-point. Read more: https://json-schema.org/understanding-json-schema",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "minLength": 3
+    }
+  },
+  "required": ["name"]
+}

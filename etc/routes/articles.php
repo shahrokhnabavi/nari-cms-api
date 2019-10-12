@@ -1,23 +1,32 @@
 <?php
 declare(strict_types = 1);
 
-use SiteApi\Infrastructure\Http\ContentController;
+use SiteApi\Infrastructure\Http\ArticleController;
 
 /** \Slim\App $app */
 
-$app->get('/contents', ContentController::class . ':list')
-    ->setName('contents-list');
+$app->get('/articles', ArticleController::class . ':list')
+    ->setName('articles-list');
 
-$app->get('/contents/{contentId:[a-f0-9]+}', ContentController::class . ':get')
-    ->setName('content');
+$app->get('/articles/{articleId:[a-f0-9-]{36}}', ArticleController::class . ':get')
+    ->setName('article');
 
-$app->post('/contents', ContentController::class . ':create')
-    ->setArgument('validationSchema', 'createContent')
-    ->setName('create-content');
+$app->post('/articles', ArticleController::class . ':create')
+    ->setArgument('validationSchema', 'createArticle')
+    ->setName('create-article');
 
-$app->put('/contents/{contentId:[a-f0-9]+}', ContentController::class . ':edit')
-    ->setArgument('validatioSchema', 'editContent')
-    ->setName('edit-content');
+$app->put('/articles/{articleId:[a-f0-9-]{36}}', ArticleController::class . ':edit')
+    ->setArgument('validationSchema', 'editArticle')
+    ->setName('edit-article');
 
-$app->delete('/contents/{contentId:[a-f0-9]+}', ContentController::class . ':delete')
-    ->setName('delete-content');
+$app->delete('/articles/{articleId:[a-f0-9-]{36}}', ArticleController::class . ':delete')
+    ->setName('delete-article');
+
+$app->post('/articles/{articleId:[a-f0-9-]{36}}/tag', ArticleController::class . ':addTagToArticle')
+    ->setArgument('validationSchema', 'createTag')
+    ->setName('add-tag-to-article');
+
+$app->delete(
+    '/articles/{articleId:[a-f0-9-]{36}}/tag/{tagId:[a-f0-9-]{36}}',
+    ArticleController::class . ':removeTagFromArticle'
+)->setName('add-tag-to-remove');

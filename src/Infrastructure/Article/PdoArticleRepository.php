@@ -4,6 +4,9 @@ declare(strict_types = 1);
 namespace SiteApi\Infrastructure\Article;
 
 use Exception;
+use InvalidArgumentException;
+use SiteApi\Domain\Article\ArticleNotFoundException;
+use SiteApi\Domain\Article\Articles;
 use SiteApi\Infrastructure\Pdo\WebsitePDO;
 use SiteApi\Core\UUID;
 use SiteApi\Domain\Article\Article;
@@ -31,16 +34,91 @@ class PdoArticleRepository
     }
 
     /**
-     * @param Article $article
+     * @return Articles
+     */
+    public function getList(): Articles
+    {
+        $statement = $this->pdo->prepare('
+            SELECT
+                a.article_id as identifier,
+                a.title, 
+                a.text,
+                a.author,
+                t.tag_id as tagId,
+                t.name as tagName 
+            FROM articles a
+            LEFT JOIN articles_tags at ON a.article_id = at.article_id
+            LEFT JOIN tags t ON at.tag_id = t.tag_id
+        ');
+        $statement->execute();
+
+        $records = $statement->fetchAll() ?? [];
+
+        return new Articles($records);
+    }
+
+    /**
+     * @param UUID $uuid
+     *
+     * @return Article
+     * @throws ArticleNotFoundException
+     * @throws Exception
+     */
+    public function getArticleById(UUID $uuid): Article
+    {
+        $statement = $this->pdo->prepare('
+            SELECT
+                a.article_id as identifier,
+                a.title, 
+                a.text,
+                a.author,
+                t.tag_id as tagId,
+                t.name as tagName 
+            FROM articles a
+            LEFT JOIN articles_tags at ON a.article_id = at.article_id
+            LEFT JOIN tags t ON at.tag_id = t.tag_id
+            WHERE a.article_id = :articleId
+        ');
+        $statement->execute([':articleId' => (string)$uuid]);
+
+        $records = $statement->fetchAll();
+        if (empty($records)) {
+            throw ArticleNotFoundException::causedBy(
+                sprintf('Article with the identifier "%s" not found', $uuid)
+            );
+        }
+
+        $tags = [];
+        foreach ($records as $record) {
+            if (empty($record['tagId'])) {
+                continue;
+            }
+
+            $tags[] = [
+                'identifier' => $record['tagId'],
+                'name' => $record['tagName'],
+            ];
+        }
+
+        $records[0]['tags'] = $tags;
+
+        return new Article($records[0]);
+    }
+
+    /**
+     * @param UUID $identifier
+     * @param string $title
+     * @param string $text
+     * @param string $author
+     * @param mixed[] $tags
      *
      * @return void
      * @throws ArticleAlreadyExistsException
-     * @throws Exception
+     * @throws PdoRepositoryException
      */
-    public function createArticleTransaction(Article $article): void
+    public function addArticle(UUID $identifier, string $title, string $text, string $author, array $tags): void
     {
-        $title = $article->getTitle();
-        if ($this->getArticleByTitle($title)) {
+        if ($this->isArticleExistBy('title', $title)) {
             throw ArticleAlreadyExistsException::causedBy(
                 sprintf('Article with the title "%s" already exists', $title)
             );
@@ -48,63 +126,139 @@ class PdoArticleRepository
 
         $this->pdo->beginTransaction();
         try {
-            $this->createArticle($article);
-            $this->tagRepository->addTagsToArticle($article->getIdentifier(), $article->getTags());
+            $statement = $this->pdo->prepare('
+                INSERT INTO articles (article_id, title, text, author) 
+                VALUES (:articleId, :title, :text, :author)
+            ');
+
+            $statement->execute([
+                ':articleId' => $identifier,
+                ':title' => $title,
+                ':text' => $text,
+                ':author' => $author,
+            ]);
+
+            $this->tags()->addTagsToArticle($identifier, $tags);
 
             $this->pdo->commit();
         } catch (Exception $exception) {
             $this->pdo->rollBack();
-            throw new Exception($exception->getMessage());
+            throw PdoRepositoryException::causedBy($exception->getMessage());
+        }
+    }
+
+    /**
+     * @param UUID $articleId
+     *
+     * @return void
+     * @throws ArticleNotFoundException
+     * @throws PdoRepositoryException
+     */
+    public function deleteArticle(UUID $articleId): void
+    {
+        $article = $this->getArticleById($articleId);
+
+        try {
+            $statement = $this->pdo->prepare('DELETE FROM articles WHERE article_id = :articleId');
+
+            $statement->execute([
+                ':articleId' => $article->getIdentifier(),
+            ]);
+        } catch (Exception $exception) {
+            throw PdoRepositoryException::causedBy($exception->getMessage());
+        }
+    }
+
+    /**
+     * @param UUID $identifier
+     * @param string $title
+     * @param string $text
+     * @param string $author
+     *
+     * @return void
+     * @throws PdoRepositoryException
+     */
+    public function editArticle(UUID $identifier, string $title, string $text, string $author): void
+    {
+        try {
+            $this->checkTitleIfDuplicate($identifier, $title);
+
+            $article = $this->getArticleById($identifier);
+
+            $statement = $this->pdo->prepare('
+                UPDATE articles SET
+                    title = :title,
+                    text = :text,
+                    author = :author
+                WHERE article_id = :articleId
+            ');
+
+            $statement->execute([
+                ':articleId' => (string)$article->getIdentifier(),
+                ':title' => empty($title) ? $article->getTitle() : $title,
+                ':text' => empty($text) ? $article->getText() : $text,
+                ':author' => empty($author) ? $article->getAuthor() : $author,
+            ]);
+        } catch (Exception $exception) {
+            throw PdoRepositoryException::causedBy($exception->getMessage());
         }
     }
 
     /**
      * @return PdoTagRepository
      */
-    public function tagRepository(): PdoTagRepository
+    public function tags(): PdoTagRepository
     {
         return $this->tagRepository;
     }
 
     /**
-     * @param string $title
+     * @param string $key
+     * @param mixed $value
      *
-     * @return Article|null
-     * @throws Exception
+     * @return bool
      */
-    public function getArticleByTitle(string $title): ?Article
+    private function isArticleExistBy(string $key, $value): bool
     {
-        $statement = $this->pdo->prepare('
-            SELECT article_id as identifier, title, text, author FROM articles WHERE title = :title
-        ');
-        $statement->execute([':title' => $title]);
+        $columnsMap = [
+            'id' => 'article_id',
+            'title' => 'title'
+        ];
 
-        $row = $statement->fetch();
-        if (!$row) {
-            return null;
+        if (empty($columnsMap[$key])) {
+            throw new InvalidArgumentException(
+                sprintf('We can not find %s key to check if article exits', $key)
+            );
         }
 
-        return new Article($row);
+        $statement = $this->pdo->prepare("
+            SELECT COUNT(*) FROM articles WHERE {$columnsMap[$key]} = :value
+        ");
+        $statement->execute([':value' => $value]);
+
+        return $statement->fetchColumn() > 0;
     }
 
     /**
-     * @param Article $article
+     * @param UUID $identifier
+     * @param string $title
      *
-     * @return UUID
+     * @throws PdoRepositoryException
      */
-    private function createArticle(Article $article): UUID
+    private function checkTitleIfDuplicate(UUID $identifier, string $title):void
     {
-        $statement = $this->pdo->prepare(
-            'INSERT INTO articles (article_id, title, text, author) VALUES (:id, :title, :text, :author)'
-        );
-
+        $statement = $this->pdo->prepare('
+                SELECT COUNT(*) FROM articles WHERE article_id != :articleId AND title = :title
+            ');
         $statement->execute([
-            ':id' => $article->getIdentifier(),
-            ':title' => $article->getTitle(),
-            ':text' => $article->getText(),
-            ':author' => $article->getAuthor(),
+            ':articleId' => $identifier,
+            ':title' => $title
         ]);
 
-        return $article->getIdentifier();
+        if ($statement->fetchColumn() > 0) {
+            throw PdoRepositoryException::causedBy(
+                'There is an article already exists with the same title.'
+            );
+        }
     }
 }
