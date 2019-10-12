@@ -3,10 +3,16 @@ declare(strict_types = 1);
 
 namespace SiteApi\Domain\Article;
 
+use Exception;
+use InvalidArgumentException;
+use SiteApi\Core\UUID;
 use SiteApi\Domain\Tags\Tag;
 
 class Article
 {
+    /** @var UUID */
+    private $identifier;
+
     /** @var string */
     private $title;
 
@@ -16,25 +22,33 @@ class Article
     /** @var string */
     private $author;
 
-    /** @var array|Tag[] */
+    /** @var Tag[] */
     private $tags;
 
     /**
-     * @param string $title
-     * @param string $text
-     * @param string $author
-     * @param Tag[] $tags
+     * @param mixed[] $data
+     *
+     * @throws Exception
      */
-    public function __construct(
-        string $title,
-        string $text,
-        string $author,
-        array $tags
-    ) {
-        $this->title = $title;
-        $this->text = $text;
-        $this->author = $author;
-        $this->tags = $tags;
+    public function __construct(array $data)
+    {
+        if (empty($data['identifier'])) {
+            throw new InvalidArgumentException('Article identifier should not be empty');
+        }
+
+        if (empty($data['title'])) {
+            throw new InvalidArgumentException('Article title should not be empty');
+        }
+
+        $identifier = $data['identifier'] instanceof UUID ?
+            $data['identifier'] :
+            UUID::fromString($data['identifier']);
+
+        $this->identifier = $identifier;
+        $this->title = $data['title'];
+        $this->text = $data['text'] ?? '';
+        $this->author = $data['author'] ?? '';
+        $this->tags = $this->loadTags($data['tags'] ?? []);
     }
 
     /**
@@ -67,5 +81,30 @@ class Article
     public function getTags(): array
     {
         return $this->tags;
+    }
+
+    /**
+     * @return UUID
+     */
+    public function getIdentifier(): UUID
+    {
+        return $this->identifier;
+    }
+
+    /**
+     * @param mixed[] $tagData
+     *
+     * @return Tag[]
+     * @throws Exception
+     */
+    private function loadTags(array $tagData): array
+    {
+        $tags = [];
+
+        foreach ($tagData as $tag) {
+            $tags[] = new Tag($tag);
+        }
+
+        return $tags;
     }
 }

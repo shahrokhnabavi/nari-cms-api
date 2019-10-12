@@ -7,7 +7,6 @@ use Exception;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use SiteApi\Application\Article\AddArticleCommand;
-use SiteApi\Application\Article\AddTagsToArticleCommand;
 use SiteApi\Core\UUID;
 
 class ContentController extends HttpController
@@ -34,24 +33,23 @@ class ContentController extends HttpController
     {
         $params = $request->getParsedBody();
 
-        // do validation
+        try {
+            $identifier = UUID::create();
 
-        $identifier = (string)UUID::create();
+            $articleCommand = new AddArticleCommand(
+                $identifier,
+                $params['title'],
+                $params['text'] ?? '',
+                $params['author'] ?? '',
+                $params['tags'] ?? []
+            );
 
-        $articleCommand = new AddArticleCommand(
-            $identifier,
-            $params['title'],
-            $params['text'] ?? '',
-            $params['author'] ?? ''
-        );
-        $this->commandBus->handle($articleCommand);
+            $this->commandBus->handle($articleCommand);
+        } catch (Exception $exception) {
+            $response->getBody()->write($exception->getMessage());
 
-        if (isset($params['tags']) && count($params['tags']) > 0) {
-            $tagsCommand = new AddTagsToArticleCommand($identifier, $params['tags']);
-            $this->commandBus->handle($tagsCommand);
+            return $response->withStatus(400);
         }
-
-        // handle errors
 
         return $this->html($response, 'create: ' . $identifier);
     }

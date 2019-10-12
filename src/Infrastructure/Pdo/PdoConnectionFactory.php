@@ -4,7 +4,6 @@ declare(strict_types = 1);
 namespace SiteApi\Infrastructure\Pdo;
 
 use InvalidArgumentException;
-use PDO;
 use PDOException;
 use Throwable;
 
@@ -27,10 +26,10 @@ class PdoConnectionFactory
     /**
      * @param string $source
      *
-     * @return PDO
+     * @return WebsitePDO
      * @throws PdoCredentialException
      */
-    public function createConnectionBySource(string $source): PDO
+    public function createConnectionBySource(string $source): WebsitePDO
     {
         if (!$this->credentialsManager->hasCredentials($source)) {
             throw new InvalidArgumentException("No credentials available for data source {$source}");
@@ -42,13 +41,13 @@ class PdoConnectionFactory
     /**
      * @param PdoCredentials $credential
      *
-     * @return PDO
+     * @return WebsitePDO
      * @throws PDOException
      */
-    private function createConnection(PdoCredentials $credential): PDO
+    private function createConnection(PdoCredentials $credential): WebsitePDO
     {
         try {
-            return new PDO(
+            return new WebsitePDO(
                 $credential->getDns(),
                 $credential->getUsername(),
                 $credential->getPassword(),
@@ -67,14 +66,14 @@ class PdoConnectionFactory
     private function getConnectionOptions(PdoCredentials $credentials): array
     {
         $options = [
-            PDO::ATTR_PERSISTENT => true,
-            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-            PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8'
+            WebsitePDO::ATTR_PERSISTENT => true,
+            WebsitePDO::ATTR_ERRMODE => WebsitePDO::ERRMODE_EXCEPTION,
+            WebsitePDO::ATTR_DEFAULT_FETCH_MODE => WebsitePDO::FETCH_ASSOC,
+            WebsitePDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8'
         ];
 
         if (!empty($credentials->getCaFile())) {
-            $options[PDO::MYSQL_ATTR_SSL_CA] = $credentials->getCaFile();
+            $options[WebsitePDO::MYSQL_ATTR_SSL_CA] = $credentials->getCaFile();
         }
 
         return $options;

@@ -16,6 +16,8 @@ final class ArticleServiceProvider extends AbstractServiceProvider
     /** @var string[] */
     protected $provides = [
         ArticleCommandHandler::class,
+        PdoArticleRepository::class,
+        PdoTagRepository::class
     ];
 
     /**
@@ -26,10 +28,16 @@ final class ArticleServiceProvider extends AbstractServiceProvider
         /** @var Container $container */
         $container = $this->getContainer();
 
-        $container->add(ArticleCommandHandler::class, function () use ($container): ArticleCommandHandler {
+        $container->add(PdoArticleRepository::class, function () use ($container): PdoArticleRepository {
             $pdo = $container->get(PdoConnectionFactory::class);
 
-            return new ArticleCommandHandler($pdo);
+            return new PdoArticleRepository($pdo);
+        });
+
+        $container->add(ArticleCommandHandler::class, function () use ($container): ArticleCommandHandler {
+            $repository = $container->get(PdoArticleRepository::class);
+
+            return new ArticleCommandHandler($repository);
         });
     }
 }
