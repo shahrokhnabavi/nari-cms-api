@@ -17,7 +17,7 @@ use SiteApi\Infrastructure\Http\ArticleController;
 use PHPUnit\Framework\TestCase;
 use Slim\Psr7\Response;
 
-class ContentControllerTest extends TestCase
+class ArticleControllerTest extends TestCase
 {
     /**
      * @var ArticleController
@@ -152,6 +152,35 @@ class ContentControllerTest extends TestCase
         $this->assertEquals('application/json', $response->getHeaderLine('Content-Type'));
     }
 
+    public function testAddTagToArticle()
+    {
+        $this->request->getParsedBody()->willReturn(['name' => 'javascript']);
+
+        $response = $this->controller->addTagToArticle(
+            $this->request->reveal(),
+            $this->response,
+            ['articleId' => 'ba9b9898-ed95-11e9-aa8f-0242c0a8f002']
+        );
+
+        $this->assertEquals(202, $response->getStatusCode());
+        $this->assertEquals('application/json', $response->getHeaderLine('Content-Type'));
+    }
+
+    public function testRemoveTagToArticle()
+    {
+        $response = $this->controller->removeTagFromArticle(
+            $this->request->reveal(),
+            $this->response,
+            [
+                'articleId' => 'ba9b9898-ed95-11e9-aa8f-0242c0a8f002',
+                'tagId' => '43cd9898-ed95-11e9-aa8f-0242c0a8f00a'
+            ]
+        );
+
+        $this->assertEquals(202, $response->getStatusCode());
+        $this->assertEquals('application/json', $response->getHeaderLine('Content-Type'));
+    }
+
     public function testEdit()
     {
         $this->request->getParsedBody()->willReturn(['title' => 'Update']);
@@ -183,15 +212,64 @@ class ContentControllerTest extends TestCase
         $this->assertArrayHasKey('identifier', $data);
     }
 
-    public function testShouldSeeStatusCode400AndErrorMessageIfSomethingWentWrongFromCreateEndPoint()
+    /**
+     * @dataProvider getActions
+     */
+    public function testShouldSeeStatusCode400AndErrorMessageIfSomethingWentWrongFromCreateEndPoint($action)
     {
-        $this->request->getParsedBody()->willReturn(['title' => '']);
+        $this->request->getParsedBody()->willReturn(['title' => '', 'name' => '']);
         $this->commandBus->handle(Argument::any())->willThrow(new Exception('Something went wrong'));
 
-        $response = $this->controller->create($this->request->reveal(), $this->response, []);
+        switch($action) {
+            case 'create':
+                $response = $this->controller->create($this->request->reveal(), $this->response, []);
+                break;
+            case 'edit':
+                $response = $this->controller->edit(
+                    $this->request->reveal(),
+                    $this->response,
+                    ['articleId' => 'ba9b9898-ed95-11e9-aa8f-0242c0a8f002']
+                );
+                break;
+            case 'delete':
+                $response = $this->controller->delete(
+                    $this->request->reveal(),
+                    $this->response,
+                    ['articleId' => 'ba9b9898-ed95-11e9-aa8f-0242c0a8f002']
+                );
+                break;
+            case 'addTagToArticle':
+                $response = $this->controller->addTagToArticle(
+                    $this->request->reveal(),
+                    $this->response,
+                    ['articleId' => 'ba9b9898-ed95-11e9-aa8f-0242c0a8f002']
+                );
+                break;
+            case 'removeTagFromArticle':
+                $response = $this->controller->removeTagFromArticle(
+                    $this->request->reveal(),
+                    $this->response,
+                    [
+                        'articleId' => 'ba9b9898-ed95-11e9-aa8f-0242c0a8f002',
+                        'tagId' => '43cd9898-ed95-11e9-aa8f-0242c0a8f00a'
+                    ]
+                );
+                break;
+        }
         $response->getBody()->rewind();
 
         $this->assertEquals(400, $response->getStatusCode());
         $this->assertStringContainsString('Something went wrong', $response->getBody()->getContents());
+    }
+
+    public function getActions()
+    {
+        return [
+            ['create'],
+            ['edit'],
+            ['delete'],
+            ['addTagToArticle'],
+            ['removeTagFromArticle'],
+        ];
     }
 }

@@ -67,6 +67,7 @@ class EditArticleCommand extends Command
     }
 
     /**
+     * @codeCoverageIgnore
      * @return mixed[]
      */
     public function toArray(): array

@@ -13,9 +13,6 @@ use SiteApi\Infrastructure\Logging\LoggingServiceProvider;
 use SiteApi\Infrastructure\Middleware\MiddlewareServiceProvider;
 use SiteApi\Infrastructure\Pdo\PdoServiceProvider;
 
-/**
- * @codeCoverageIgnore
- */
 class ContainerFactory
 {
     /**

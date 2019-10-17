@@ -60,12 +60,12 @@ php_lint_fix: ## Fix php code style errors
 	${START_COMMAND} php ${VENDOR}/phpcbf
 	@echo ''
 
-.PHONY: test_acceptance
-test_acceptance: ## Run all acceptance test
+.PHONY: acceptance_test
+acceptance_test: ## Run all acceptance test
 	echo "${RED}${OS} ${RED}"
 
-.PHONY: test_unit
-test_unit: ## Run all unit tests
+.PHONY: unit_test
+unit_test: ## Run all unit tests
 	${START_COMMAND} php ${VENDOR}/phpunit -c phpunit.xml --testsuite Units
 
 .PHONY: init_mysql

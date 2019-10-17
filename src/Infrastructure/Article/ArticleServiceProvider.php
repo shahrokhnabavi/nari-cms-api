@@ -8,9 +8,6 @@ use League\Container\ServiceProvider\AbstractServiceProvider;
 use SiteApi\Application\Article\ArticleCommandHandler;
 use SiteApi\Infrastructure\Pdo\PdoConnectionFactory;
 
-/**
- * @codeCoverageIgnore
- */
 final class ArticleServiceProvider extends AbstractServiceProvider
 {
     /** @var string[] */

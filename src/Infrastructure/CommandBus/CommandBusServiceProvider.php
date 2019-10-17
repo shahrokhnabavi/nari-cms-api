@@ -14,9 +14,6 @@ use Psr\Log\LoggerInterface;
 use SiteApi\Application\CommandBus\CommandHandlerInterface;
 use SiteApi\Infrastructure\Configuration\ConfigurationInterface;
 
-/**
- * @codeCoverageIgnore
- */
 final class CommandBusServiceProvider extends AbstractServiceProvider
 {
     /** @var string[] */

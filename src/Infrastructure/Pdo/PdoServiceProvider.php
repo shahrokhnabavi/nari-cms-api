@@ -7,10 +7,7 @@ use League\Container\Container;
 use League\Container\ServiceProvider\AbstractServiceProvider;
 use SiteApi\Infrastructure\Configuration\ConfigurationInterface;
 
-/**
- * @codeCoverageIgnore
- */
-class PdoServiceProvider extends AbstractServiceProvider
+final class PdoServiceProvider extends AbstractServiceProvider
 {
     /** @var string[] */
     protected $provides = [
