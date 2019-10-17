@@ -8,9 +8,6 @@ use League\Container\Container;
 use League\Container\ServiceProvider\AbstractServiceProvider;
 use Psr\Log\LoggerInterface;
 
-/**
- * @codeCoverageIgnore
- */
 final class MiddlewareServiceProvider extends AbstractServiceProvider
 {
     /** @var string[] */

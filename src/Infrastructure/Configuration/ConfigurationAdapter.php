@@ -5,9 +5,6 @@ namespace SiteApi\Infrastructure\Configuration;
 
 use Noodlehaus\Config;
 
-/**
- * @codeCoverageIgnore
- */
 class ConfigurationAdapter implements ConfigurationInterface
 {
     /** @var Config */

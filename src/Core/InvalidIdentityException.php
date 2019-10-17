@@ -5,9 +5,6 @@ namespace SiteApi\Core;
 
 use InvalidArgumentException;
 
-/**
- * @codeCoverageIgnore
- */
 class InvalidIdentityException extends InvalidArgumentException
 {
     /**

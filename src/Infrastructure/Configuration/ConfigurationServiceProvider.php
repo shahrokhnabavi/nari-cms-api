@@ -7,9 +7,6 @@ use League\Container\Container;
 use League\Container\ServiceProvider\AbstractServiceProvider;
 use Noodlehaus\Config;
 
-/**
- * @codeCoverageIgnore
- */
 final class ConfigurationServiceProvider extends AbstractServiceProvider
 {
     /** string */

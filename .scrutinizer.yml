@@ -31,7 +31,7 @@ build:
         tests_1:
             tests:
                 override:
-                    - command: make test_unit
+                    - command: make unit_test
                       coverage:
                         file: tests/coverage.xml
                         format: clover

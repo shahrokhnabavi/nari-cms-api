@@ -12,9 +12,6 @@ use SiteApi\Infrastructure\Middleware\JsonValidationMiddleware;
 use Slim\App;
 use Slim\Factory\AppFactory;
 
-/**
- * @codeCoverageIgnore
- */
 final class SlimServiceProvider extends AbstractServiceProvider
 {
     /** @var string[] */

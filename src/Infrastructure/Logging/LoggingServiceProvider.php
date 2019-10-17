@@ -8,9 +8,6 @@ use League\Container\ServiceProvider\AbstractServiceProvider;
 use Psr\Log\LoggerInterface;
 use SiteApi\Infrastructure\Configuration\ConfigurationInterface;
 
-/**
- * @codeCoverageIgnore
- */
 final class LoggingServiceProvider extends AbstractServiceProvider
 {
     /** @var string[] */

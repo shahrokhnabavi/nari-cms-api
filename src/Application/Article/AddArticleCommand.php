@@ -78,18 +78,4 @@ class AddArticleCommand extends Command
     {
         return $this->tags;
     }
-
-    /**
-     * @return mixed[]
-     */
-    public function toArray(): array
-    {
-        return [
-            'identifier' => $this->getIdentifier(),
-            'title' => $this->getTitle(),
-            'text' => $this->getText(),
-            'author' => $this->getAuthor(),
-            'tags' => $this->getTags(),
-        ];
-    }
 }

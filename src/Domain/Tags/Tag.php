@@ -56,6 +56,7 @@ class Tag implements JsonSerializable
     }
 
     /**
+     * @codeCoverageIgnore
      * @inheritDoc
      */
     public function jsonSerialize()
