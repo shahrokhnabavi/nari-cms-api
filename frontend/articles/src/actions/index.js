@@ -1,4 +1,5 @@
 export default {
-  AGE_DOWN: {type: 'AGE_DOWN'},
-  AGE_UP: {type: 'AGE_UP'}
+  AGE_DOWN: 'AGE_DOWN',
+  AGE_UP: 'AGE_UP',
+  REMOVE_ITEM_HISTORY: 'REMOVE_ITEM_HISTORY'
 }
