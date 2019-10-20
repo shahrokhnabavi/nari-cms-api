@@ -63,7 +63,7 @@ function parseArticle($url)
 {
     $html = file_get_contents($url);
     $html = str_replace(['&nbsp;', 'Written by'], ' ', $html);
-    $html = str_replace(['More Information', 'Related Articles'], '__RENAMED__', $html);
+    $html = str_replace(['More Information', 'Related ArticlesReducer'], '__RENAMED__', $html);
 
     $pattern = [
         'author' => '|class="contentpaneopen">.*class="small">(.*)</span>.*</table>|Usi',

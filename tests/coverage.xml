@@ -237,8 +237,8 @@
         <line num="20" type="stmt" count="1"/>
         <metrics loc="22" ncloc="15" classes="1" methods="1" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="1" coveredstatements="1" elements="2" coveredelements="2"/>
       </file>
-      <file name="/var/www/src/Domain/Article/Articles.php">
-        <class name="SiteApi\Domain\Article\Articles" namespace="SiteApi\Domain\Article">
+      <file name="/var/www/src/Domain/Article/ArticlesReducer.php">
+        <class name="SiteApi\Domain\Article\ArticlesReducer" namespace="SiteApi\Domain\Article">
           <metrics complexity="5" methods="3" coveredmethods="3" conditionals="0" coveredconditionals="0" statements="14" coveredstatements="14" elements="17" coveredelements="17"/>
         </class>
         <line num="16" type="method" name="__construct" visibility="public" complexity="1" crap="1" count="1"/>

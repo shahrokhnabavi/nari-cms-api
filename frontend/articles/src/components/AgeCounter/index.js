@@ -1,6 +1,6 @@
 import React from 'react';
-import * as actions from "../../actions";
-import { connect } from "react-redux";
+import { AgeCounterAction } from '../../actions';
+import { connect } from 'react-redux';
 import './AgeCounter.css';
 
 const AgeCounter = props => {
@@ -31,12 +31,15 @@ const AgeCounter = props => {
   );
 };
 
-const mapStoreToProps = state => ({age: state.age, history: state.history});
+const mapStoreToProps = state => ({
+  age: state.AgeCounterReducer.age,
+  history: state.AgeCounterReducer.history
+});
 
 const mapDispatchToProps = {
-  onAgeUp: actions.ageUp,
-  onAgeDown: actions.ageDown,
-  onRemoveItemHistory: actions.removeItemHistory
+  onAgeUp: AgeCounterAction.ageUp,
+  onAgeDown: AgeCounterAction.ageDown,
+  onRemoveItemHistory: AgeCounterAction.removeItemHistory
 };
 
 export default connect(mapStoreToProps, mapDispatchToProps)(AgeCounter);
