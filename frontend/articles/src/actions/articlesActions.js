@@ -1,4 +1,10 @@
 export const REQUEST_ARTICLES_LIST = 'REQUEST_ARTICLES_LIST';
 export const RECEIVED_ARTICLES_LIST = 'RECEIVED_ARTICLES_LIST';
+export const FAILED_ARTICLE_LIST = 'FAILED_ARTICLE_LIST';
 
-export const loadArticles = () => ({type: REQUEST_ARTICLES_LIST});
+export const REQUEST_ARTICLE_ADD = 'REQUEST_ARTICLE_ADD';
+export const RECEIVED_ARTICLE_ADD = 'RECEIVED_ARTICLE_ADD';
+export const FAILED_ARTICLE_ADD = 'FAILED_ARTICLE_ADD';
+
+export const getArticles = () => ({type: REQUEST_ARTICLES_LIST});
+export const addArticle = data => ({type: REQUEST_ARTICLE_ADD, data});
