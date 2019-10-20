@@ -1,10 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import './App.css';
-import actions from '../actions';
+import * as actions from '../actions';
 
 const App = props => {
-  const value = Math.round(Math.random() * (6-1) + 1);
+  const value = Math.round(Math.random() * (6 - 1) + 1);
 
   return (
     <div className="App">
@@ -33,12 +33,12 @@ const App = props => {
   );
 };
 
-const mapStateToProps = state => ({age: state.age, history: state.history});
+const mapStoreToProps = state => ({age: state.age, history: state.history});
 
-const mapDispatchToProps = dispatch => ({
-  onAgeUp: stepUp => dispatch({type: actions.AGE_UP, value: stepUp}),
-  onAgeDown: stepDow => dispatch({type: actions.AGE_DOWN, value: stepDow}),
-  onRemoveItemHistory: id => dispatch({type: actions.REMOVE_ITEM_HISTORY, key: id})
-});
+const mapDispatchToProps = {
+  onAgeUp: actions.ageUp,
+  onAgeDown: actions.ageDown,
+  onRemoveItemHistory: actions.removeItemHistory
+};
 
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default connect(mapStoreToProps, mapDispatchToProps)(App);
