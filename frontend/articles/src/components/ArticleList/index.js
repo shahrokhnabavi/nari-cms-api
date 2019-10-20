@@ -5,7 +5,7 @@ import './ArticleList.css';
 
 class ArticleList extends Component {
   componentDidMount() {
-    this.props.loadArticles();
+    this.props.getArticles();
   }
 
   render() {
@@ -30,7 +30,7 @@ const mapStoreToProps = state => ({
 });
 
 const mapDispatchToProps = {
-  loadArticles: ArticleActions.loadArticles
+  getArticles: ArticleActions.getArticles
 };
 
 export default connect(mapStoreToProps, mapDispatchToProps)(ArticleList);

@@ -18,6 +18,26 @@ const ArticlesReducer = (state = initialState, action) => {
         articles: action.articles,
         loading: false,
       };
+    case ArticleActions.FAILED_ARTICLE_LIST:
+      return {
+        ...state,
+        loading: false,
+      };
+    case ArticleActions.REQUEST_ARTICLE_ADD:
+      return {
+        ...state,
+      };
+    case ArticleActions.RECEIVED_ARTICLE_ADD:
+      console.log('add article reducer received.', action);
+      return {
+        ...state,
+        articleId: action.articleId
+      };
+    case ArticleActions.FAILED_ARTICLE_ADD:
+      return {
+        ...state,
+        error: action.error
+      };
     default:
       return state;
   }
