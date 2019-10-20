@@ -1,34 +1,49 @@
-import actions from '../actions';
+import * as actions from '../actions';
 
 const initialState = {
   age: 35,
-  history: []
+  history: [],
+  loading: false
 };
 
 const AgeReducer = (state = initialState, action) => {
   const newState = {...state};
 
-  if (action.type === actions.AGE_UP) {
-    newState.age += action.value;
-    newState.history = state.history.concat({
-      log: `Age ${state.age} increased by ${action.value} and become ${newState.age}`,
-      key: Math.random()
-    });
+  switch (action.type) {
+    case actions.AGE_UP:
+    case actions.AGE_DOWN:
+      return {
+        ...state,
+        loading: true
+      };
+    case actions.AGE_UP_ASYNC:
+      return {
+        ...state,
+        age: state.age + action.value,
+        loading: false,
+        history: state.history.concat({
+          log: `Age ${state.age} increased by ${action.value} and become ${newState.age + action.value}`,
+          key: Math.random()
+        })
+      };
+    case actions.AGE_DOWN_ASYNC:
+      return {
+        ...state,
+        age: state.age - action.value,
+        loading: false,
+        history: state.history.concat({
+          log: `Age ${state.age} decreased by ${action.value} and become ${state.age - action.value}`,
+          key: Math.random()
+        })
+      };
+    case actions.REMOVE_ITEM_HISTORY:
+      return {
+        ...state,
+        history: state.history.filter(el => el.key !== action.key)
+      };
+    default:
+      return state;
   }
-
-  if (action.type === actions.AGE_DOWN) {
-    newState.age -= action.value;
-    newState.history.push({
-      log: `Age ${state.age} decreased by ${action.value} and become ${newState.age}`,
-      key: Math.random()
-    });
-  }
-
-  if (action.type === actions.REMOVE_ITEM_HISTORY) {
-    newState.history = state.history.filter(el => el.key !== action.key)
-  }
-
-  return newState;
 };
 
 export default AgeReducer;
