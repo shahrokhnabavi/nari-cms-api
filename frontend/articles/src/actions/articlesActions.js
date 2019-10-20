@@ -1,0 +1,4 @@
+export const REQUEST_ARTICLES_LIST = 'REQUEST_ARTICLES_LIST';
+export const RECEIVED_ARTICLES_LIST = 'RECEIVED_ARTICLES_LIST';
+
+export const loadArticles = () => ({type: REQUEST_ARTICLES_LIST});

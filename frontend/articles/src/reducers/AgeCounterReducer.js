@@ -1,4 +1,4 @@
-import * as actions from '../actions';
+import { AgeCounterAction } from '../actions';
 
 const initialState = {
   age: 35,
@@ -6,17 +6,17 @@ const initialState = {
   loading: false
 };
 
-const AgeReducer = (state = initialState, action) => {
+const AgeCounterReducer = (state = initialState, action) => {
   const newState = {...state};
 
   switch (action.type) {
-    case actions.AGE_UP:
-    case actions.AGE_DOWN:
+    case AgeCounterAction.AGE_UP:
+    case AgeCounterAction.AGE_DOWN:
       return {
         ...state,
         loading: true
       };
-    case actions.AGE_UP_ASYNC:
+    case AgeCounterAction.AGE_UP_ASYNC:
       return {
         ...state,
         age: state.age + action.value,
@@ -26,7 +26,7 @@ const AgeReducer = (state = initialState, action) => {
           key: Math.random()
         })
       };
-    case actions.AGE_DOWN_ASYNC:
+    case AgeCounterAction.AGE_DOWN_ASYNC:
       return {
         ...state,
         age: state.age - action.value,
@@ -36,7 +36,7 @@ const AgeReducer = (state = initialState, action) => {
           key: Math.random()
         })
       };
-    case actions.REMOVE_ITEM_HISTORY:
+    case AgeCounterAction.REMOVE_ITEM_HISTORY:
       return {
         ...state,
         history: state.history.filter(el => el.key !== action.key)
@@ -46,4 +46,4 @@ const AgeReducer = (state = initialState, action) => {
   }
 };
 
-export default AgeReducer;
+export default AgeCounterReducer;
