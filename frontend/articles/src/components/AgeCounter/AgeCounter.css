@@ -1,0 +1,44 @@
+
+.App-header {
+    background-color: #282c34;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: calc(10px + 2vmin);
+    color: white;
+}
+
+.App-link {
+    color: #09d3ac;
+}
+
+.Button-Holder {
+    flex-direction: row;
+    width: 170px;
+    justify-content: space-between;
+    display: flex;
+}
+.Button-Holder button {
+    width: 80px;
+    height: 40px;
+}
+
+.History {
+    width: 100%;
+}
+
+.History ul {
+    list-style: none;
+    padding: 0;
+}
+
+.History li {
+    border: 1px solid red;
+    padding: 10px;
+    background-color: brown;
+    margin-bottom: 5px;
+    cursor: pointer;
+    font-size: 12px;
+}
