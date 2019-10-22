@@ -7,6 +7,7 @@ use League\Container\Container;
 use League\Container\ServiceProvider\AbstractServiceProvider;
 use SiteApi\Infrastructure\Configuration\ConfigurationInterface;
 use SiteApi\Infrastructure\ErrorHandling\ErrorHandlingFactory;
+use SiteApi\Infrastructure\Middleware\CorsMiddleware;
 use SiteApi\Infrastructure\Middleware\JsonBodyParserMiddleware;
 use SiteApi\Infrastructure\Middleware\JsonValidationMiddleware;
 use Slim\App;
@@ -33,6 +34,7 @@ final class SlimServiceProvider extends AbstractServiceProvider
 
             $app->add($container->get(JsonValidationMiddleware::class));
             $app->add($container->get(JsonBodyParserMiddleware::class));
+            $app->add($container->get(CorsMiddleware::class));
 
             $config = $container->get(ConfigurationInterface::class);
             if ($config->get('environment') !== 'development') {

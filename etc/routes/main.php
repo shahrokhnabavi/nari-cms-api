@@ -14,3 +14,7 @@ $app->get('/', function (Request $request, Response $response, array $args) {
 
     return $response->withHeader('Content-Type', 'application/json');
 });
+
+$app->options('/{routes:.+}', function ($request, $response, $args) {
+    return $response;
+});
