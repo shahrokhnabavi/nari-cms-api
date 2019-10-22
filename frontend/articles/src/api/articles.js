@@ -12,7 +12,7 @@ export const addArticle = async (data) => {
 };
 
 export const getArticles = async () => {
-  const response = await axios.get('https://jsonplaceholder.typicode.com/posts');
+  const response = await axios.get('http://localhost/articles');
 
   if (response.status === 200) {
     return response.data;

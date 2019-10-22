@@ -14,6 +14,7 @@ final class MiddlewareServiceProvider extends AbstractServiceProvider
     protected $provides = [
         JsonValidationMiddleware::class,
         JsonBodyParserMiddleware::class,
+        CorsMiddleware::class,
     ];
 
     /**
@@ -24,7 +25,11 @@ final class MiddlewareServiceProvider extends AbstractServiceProvider
         /** @var Container $container */
         $container = $this->getContainer();
 
-        $container->add(JsonBodyParserMiddleware::class, function () use ($container): JsonBodyParserMiddleware {
+        $container->add(CorsMiddleware::class, function (): CorsMiddleware {
+            return new CorsMiddleware();
+        });
+
+        $container->add(JsonBodyParserMiddleware::class, function (): JsonBodyParserMiddleware {
             return new JsonBodyParserMiddleware();
         });
 

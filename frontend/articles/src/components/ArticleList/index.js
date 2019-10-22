@@ -9,14 +9,15 @@ class ArticleList extends Component {
   }
 
   render() {
+    const articles = Object.keys(this.props.articles);
     return this.props.loading ?
       (<div>loading</div>) :
       (<Fragment>
         <h3 className="ArticleListTitle">Article List</h3>
         <ul className="ArticleList">
           {
-            this.props.articles.length ?
-              this.props.articles.map(article => (<li key={article.id}>{article.title}</li>)) :
+            articles.length ?
+              articles.map(identifier => (<li key={identifier}>{this.props.articles[identifier].title}</li>)) :
               (<div>List is empty</div>)
           }
         </ul>
