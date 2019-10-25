@@ -33,3 +33,10 @@ local system to the ones in your container. Go to File -> Settings -> Languages 
 ## API Request Body Validator
 We received structured JSON data via each api call and validated them based on **JSON Schema**,
 [JSON Schema](https://json-schema.org/) is a powerful tool for validating the structure of JSON data.
+
+## React
+- [Props Type](https://reactjs.org/docs/typechecking-with-proptypes.html)
+- [Material UI 4.0](https://material-ui.com/components)
+- Redux
+- Redux Form
+- Redux Sagas

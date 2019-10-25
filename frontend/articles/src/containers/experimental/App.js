@@ -1,10 +1,10 @@
 import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import './App.css';
-import ArticleList from '../components/ArticleList';
-import AddArticleForm from '../components/form/AddArticleForm';
-import AgeCounter from '../components/AgeCounter';
-import NavBar from '../components/NavBar';
+import ArticleList from '../../components/ArticleList';
+import AddArticleForm from '../../components/form/AddArticleForm';
+import AgeCounter from '../../components/AgeCounter';
+import NavBar from '../../components/NavBar';
 
 const App = () => {
   return (
