@@ -5,9 +5,14 @@ import { Provider } from 'react-redux';
 import * as serviceWorker from './serviceWorker';
 import './index.css';
 
-import App from './containers/App';
+import ContainerSwitch from './containers/ContainerSwitch';
 import store from './store';
 
-ReactDOM.render(<Provider store={store}><App /></Provider>, document.getElementById('root'));
+ReactDOM.render(
+  <Provider store={store}>
+    <ContainerSwitch container="admin" />
+  </Provider>,
+  document.getElementById('root')
+);
 
 serviceWorker.unregister();
