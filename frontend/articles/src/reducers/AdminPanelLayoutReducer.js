@@ -17,7 +17,7 @@ const AdminPanelLayoutReducer = (state = initialState, action) => {
         ...state,
         isMenuOpen: false
       };
-    case 'changeTitle':
+    case AdminPanelLayoutActions.CHANGE_PAGE_HEAD_TITLE:
       return {
         ...state,
         pageTitle: action.title

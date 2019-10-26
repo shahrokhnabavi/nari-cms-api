@@ -19,7 +19,6 @@ const TopBar = props => {
       <Toolbar>
         <IconButton
           color="inherit"
-          aria-label="open drawer"
           onClick={openMenu}
           edge="start"
           className={conditionalCssClass(classes.menuButton, [isMenuOpen, classes.hide])}

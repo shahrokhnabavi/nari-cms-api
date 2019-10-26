@@ -1,42 +1,33 @@
 import React from 'react';
-import { BrowserRouter, Switch, Route } from 'react-router-dom';
-import { connect }  from 'react-redux';
+import { BrowserRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { MuiThemeProvider } from '@material-ui/core';
 
+import theme from './theme';
 import useStyles from './AdminStyle';
 import conditionalCssClass from '../../util/conditionalCssClass';
 import MainMenu from '../../components/AdminLayout/MainMenu';
 import TopBar from '../../components/AdminLayout/TopBar';
-
-import ArticleList from '../../components/ArticleList';
-import AddArticleForm from '../../components/form/AddArticleForm';
-import Pages from '../../components/pages';
-
+import SwitchAdminRoutes from "./routes";
 
 const AdminPanelLayout = props => {
   const classes = useStyles();
   const { isMenuOpen } = props;
 
   return (
-    <BrowserRouter>
-      <div className={classes.root}>
-        <TopBar classes={classes} />
-        <MainMenu classes={classes} />
+    <MuiThemeProvider theme={theme}>
+      <BrowserRouter>
+        <div className={classes.root}>
+          <TopBar classes={classes} />
+          <MainMenu classes={classes} />
 
-        <main className={conditionalCssClass(classes.content, [isMenuOpen, classes.contentShift])}>
-          <div className={classes.drawerHeader} />
-          <Switch>
-            <Route exact path="/" component={Pages.Dashboard} />
-            <Route exact path="/articles" component={ArticleList} />
-            <Route exact path="/articles/add" component={AddArticleForm} />
-            <Route path="/article/:id" component={() => (<div>one article</div>)} />
-            <Route path="/about" component={Pages.About} />
-            <Route path="/help" component={Pages.Help} />
-            <Route path="/settings" component={Pages.Settings} />
-            <Route component={Pages.NotFound} />
-          </Switch>
-        </main>
-      </div>
-    </BrowserRouter>
+          <main className={conditionalCssClass(classes.content, [isMenuOpen, classes.contentShift])}>
+            <div className={classes.drawerHeader} />
+            <SwitchAdminRoutes />
+          </main>
+        </div>
+      </BrowserRouter>
+    </MuiThemeProvider>
   );
 };
 
