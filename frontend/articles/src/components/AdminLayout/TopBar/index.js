@@ -9,7 +9,7 @@ import { AdminPanelLayoutActions } from "../../../actions";
 import Icon from '../../shared/Icon';
 
 const TopBar = props => {
-  const { classes, isMenuOpen, openMenu } = props;
+  const { classes, isMenuOpen, openMenu, pageTitle } = props;
 
   return (
     <AppBar
@@ -27,7 +27,7 @@ const TopBar = props => {
           <Icon type="menu" />
         </IconButton>
         <Typography variant="h6" noWrap>
-          Persistent drawer
+          {pageTitle}
         </Typography>
       </Toolbar>
     </AppBar>
@@ -35,7 +35,8 @@ const TopBar = props => {
 };
 
 const mapStoreToProps = state => ({
-  isMenuOpen: state.AdminPanelLayoutReducer.isMenuOpen
+  isMenuOpen: state.AdminPanelLayoutReducer.isMenuOpen,
+  pageTitle: state.AdminPanelLayoutReducer.pageTitle,
 });
 
 const mapDispatchToProps = {

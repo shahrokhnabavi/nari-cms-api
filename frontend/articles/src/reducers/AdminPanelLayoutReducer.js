@@ -1,7 +1,8 @@
 import { AdminPanelLayoutActions } from '../actions';
 
 const initialState = {
-  isMenuOpen: false
+  isMenuOpen: false,
+  pageTitle: ''
 };
 
 const AdminPanelLayoutReducer = (state = initialState, action) => {
@@ -15,6 +16,11 @@ const AdminPanelLayoutReducer = (state = initialState, action) => {
       return {
         ...state,
         isMenuOpen: false
+      };
+    case 'changeTitle':
+      return {
+        ...state,
+        pageTitle: action.title
       };
     default:
       return state;

@@ -1,20 +1,47 @@
 import React from 'react';
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import { connect }  from 'react-redux';
 
 import useStyles from './AdminStyle';
-import ContentRoute from './ContentRoute';
+import conditionalCssClass from '../../util/conditionalCssClass';
 import MainMenu from '../../components/AdminLayout/MainMenu';
 import TopBar from '../../components/AdminLayout/TopBar';
 
-const AdminPanelLayout = () => {
+import ArticleList from '../../components/ArticleList';
+import AddArticleForm from '../../components/form/AddArticleForm';
+import Pages from '../../components/pages';
+
+
+const AdminPanelLayout = props => {
   const classes = useStyles();
+  const { isMenuOpen } = props;
 
   return (
-    <div className={classes.root}>
-      <TopBar classes={classes}/>
-      <MainMenu classes={classes} />
-      <ContentRoute classes={classes} />
-    </div>
+    <BrowserRouter>
+      <div className={classes.root}>
+        <TopBar classes={classes} />
+        <MainMenu classes={classes} />
+
+        <main className={conditionalCssClass(classes.content, [isMenuOpen, classes.contentShift])}>
+          <div className={classes.drawerHeader} />
+          <Switch>
+            <Route exact path="/" component={Pages.Dashboard} />
+            <Route exact path="/articles" component={ArticleList} />
+            <Route exact path="/articles/add" component={AddArticleForm} />
+            <Route path="/article/:id" component={() => (<div>one article</div>)} />
+            <Route path="/about" component={Pages.About} />
+            <Route path="/help" component={Pages.Help} />
+            <Route path="/settings" component={Pages.Settings} />
+            <Route component={Pages.NotFound} />
+          </Switch>
+        </main>
+      </div>
+    </BrowserRouter>
   );
 };
 
-export default AdminPanelLayout;
+const mapStoreToProps = state => ({
+  isMenuOpen: state.AdminPanelLayoutReducer.isMenuOpen
+});
+
+export default connect(mapStoreToProps, null)(AdminPanelLayout);

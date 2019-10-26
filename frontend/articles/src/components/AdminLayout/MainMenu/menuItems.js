@@ -5,6 +5,6 @@ export default [
   {type: 'divider', caption: 'Tools'},
   {caption: 'Article', url: '/articles'},
   {type: 'divider'},
-  {caption: 'Settings', url: '/setting', icon: 'settings'},
+  {caption: 'Settings', url: '/settings', icon: 'settings'},
   {caption: 'Help', url: '/help', icon: 'help'},
 ];
