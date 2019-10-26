@@ -1,9 +1,9 @@
 import React from 'react';
 
 import useStyles from './AdminStyle';
-import ContentRoute from "./ContentRoute";
-import MainMenu from "./MainMenu";
-import TopBar from "./TopBar";
+import ContentRoute from './ContentRoute';
+import MainMenu from '../../components/AdminLayout/MainMenu';
+import TopBar from '../../components/AdminLayout/TopBar';
 
 const AdminPanelLayout = () => {
   const classes = useStyles();
