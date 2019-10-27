@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from "prop-types";
 
 import AdminPanelLayout from './admin/AdminPanelLayout';
-import App from './experimental/App';
+import App from './experimental';
 
 const ContainerSwitch = props => {
   const { container } = props;

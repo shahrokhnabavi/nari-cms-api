@@ -1,19 +1,22 @@
 import React from 'react';
+import { NavLink } from 'react-router-dom';
 import { ListItem, ListItemIcon, ListItemText, Divider } from "@material-ui/core";
-import menuItams from "./menuItams";
-import Index from "../../shared/Icon";
+import menuItems from './menuItems';
+import Index from '../../shared/Icon';
 
 const MainMenuItem = () => {
-  return menuItams.map((item, index) => {
+  return menuItems.map((item, index) => {
     if (item.type === 'divider') {
       return <Divider key={index} />
     }
 
     return (
-      <ListItem button key={index}>
-        <ListItemIcon><Index type={item.icon} /></ListItemIcon>
-        <ListItemText primary={item.caption} />
-      </ListItem>
+      <NavLink exact to={item.url} key={index}>
+        <ListItem button>
+          <ListItemIcon><Index type={item.icon} /></ListItemIcon>
+          <ListItemText primary={item.caption} />
+        </ListItem>
+      </NavLink>
     );
   });
 };

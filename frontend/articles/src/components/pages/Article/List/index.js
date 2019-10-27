@@ -1,7 +1,9 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
-import { ArticleActions } from '../../actions';
+
+import { ArticleActions } from '../../../../actions';
 import './ArticleList.css';
+import withTitle from '../../../shared/withTitle';
 
 class ArticleList extends Component {
   componentDidMount() {
@@ -34,4 +36,6 @@ const mapDispatchToProps = {
   getArticles: ArticleActions.getArticles
 };
 
-export default connect(mapStoreToProps, mapDispatchToProps)(ArticleList);
+export default connect(mapStoreToProps, mapDispatchToProps)(
+  withTitle(ArticleList, 'Articles')
+);

@@ -1,33 +1,27 @@
 import React from 'react';
-import {
-  Inbox, Mail, Settings, HelpOutline, Dashboard, InfoOutlined, ChevronLeft, ChevronRight, Menu
-} from "@material-ui/icons";
+import * as Icons from '@material-ui/icons';
 
-const Index = props => {
-  const { type } = props;
-
-  switch (type) {
-    case 'mail':
-      return <Mail />;
-    case 'inbox':
-      return <Inbox />;
-    case 'dashboard':
-      return <Dashboard />;
-    case 'help':
-      return <HelpOutline />;
-    case 'settings':
-      return <Settings />;
-    case 'info':
-      return <InfoOutlined />;
-    case 'chevronLeft':
-      return <ChevronLeft />;
-    case 'chevronRight':
-      return <ChevronRight />;
-    case 'menu':
-      return <Menu />;
-    default:
-      return ''
-  }
+const mapIcons = {
+  mail: Icons.Mail,
+  inbox: Icons.Inbox,
+  menu: Icons.Menu,
+  dashboard: Icons.Dashboard,
+  help: Icons.HelpOutline,
+  settings: Icons.Settings,
+  info: Icons.InfoOutlined,
+  chevronRight: Icons.ChevronRight,
+  chevronLeft: Icons.ChevronLeft,
 };
 
-export default Index;
+const Icon = props => {
+  const { type } = props;
+  const Component = mapIcons[type] || '';
+
+  if (Component === '') {
+    return '';
+  }
+
+  return <Component />;
+};
+
+export default Icon;

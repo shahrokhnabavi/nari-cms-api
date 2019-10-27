@@ -1,14 +1,10 @@
-import React  from 'react';
-import { connect }  from 'react-redux';
-import Typography from "@material-ui/core/Typography";
-import conditionalCssClass from "../../util/conditionalCssClass";
+import React, { Fragment } from 'react';
+import Typography from '@material-ui/core/Typography';
+import withTitle from '../../shared/withTitle';
 
-const ContentRoute = props => {
-  const { classes } = props;
-
+const Dashboard = props => {
   return (
-    <main className={conditionalCssClass(classes.content, [props.isMenuOpen, classes.contentShift])}>
-      <div className={classes.drawerHeader} />
+    <Fragment>
       <Typography paragraph>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
         ut labore et dolore magna aliqua. Rhoncus dolor purus non enim praesent elementum
@@ -32,12 +28,8 @@ const ContentRoute = props => {
         nibh sit. Ornare aenean euismod elementum nisi quis eleifend. Commodo viverra maecenas
         accumsan lacus vel facilisis. Nulla posuere sollicitudin aliquam ultrices sagittis orci a.
       </Typography>
-    </main>
+    </Fragment>
   );
 };
 
-const mapStoreToProps = state => ({
-  isMenuOpen: state.AdminPanelLayoutReducer.isMenuOpen
-});
-
-export default connect(mapStoreToProps, null)(ContentRoute);
+export default withTitle(Dashboard, 'Dashboard');
