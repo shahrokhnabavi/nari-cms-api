@@ -6,6 +6,7 @@ import './ArticleList.css';
 import withTitle from '../../../shared/withTitle';
 import FloatingButton from '../../../shared/FloatingButton';
 import TableListItem from './TableListItem';
+import Loading from '../../../shared/Loading';
 
 class ArticleList extends Component {
   componentDidMount() {
@@ -17,7 +18,7 @@ class ArticleList extends Component {
     const articleIds = Object.keys(articles);
 
     return this.props.loading ?
-      (<div>loading</div>) :
+      <Loading size="30" thickness="5" /> :
       (<Fragment>
         <h3 className="ArticleListTitle">Article List</h3>
         <ul className="ArticleList">
