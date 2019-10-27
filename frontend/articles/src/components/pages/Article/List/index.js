@@ -5,6 +5,7 @@ import { ArticleActions } from '../../../../actions';
 import './ArticleList.css';
 import withTitle from '../../../shared/withTitle';
 import FloatingButton from '../../../shared/FloatingButton';
+import TableListItem from './TableListItem';
 
 class ArticleList extends Component {
   componentDidMount() {
@@ -12,15 +13,17 @@ class ArticleList extends Component {
   }
 
   render() {
-    const articles = Object.keys(this.props.articles);
+    const { articles } = this.props;
+    const articleIds = Object.keys(articles);
+
     return this.props.loading ?
       (<div>loading</div>) :
       (<Fragment>
         <h3 className="ArticleListTitle">Article List</h3>
         <ul className="ArticleList">
           {
-            articles.length ?
-              articles.map(identifier => (<li key={identifier}>{this.props.articles[identifier].title}</li>)) :
+            articleIds.length ?
+              articleIds.map(identifier => (<TableListItem key={identifier} item={articles[identifier]} />)) :
               (<div>List is empty</div>)
           }
         </ul>

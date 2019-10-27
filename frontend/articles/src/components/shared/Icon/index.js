@@ -15,6 +15,7 @@ const mapIcons = {
   add: Icons.Add,
   edit: Icons.Edit,
   up: Icons.KeyboardArrowUp,
+  delete: Icons.Delete
 };
 
 const Icon = props => {

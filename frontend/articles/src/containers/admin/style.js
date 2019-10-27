@@ -1,8 +1,7 @@
 import makeStyles from "@material-ui/core/styles/makeStyles";
+import { drawerWidth } from '../../themeVariables';
 
-const drawerWidth = 240;
-
-const useStyles = makeStyles(theme => ({
+export default makeStyles(theme => ({
   root: {
     display: 'flex',
   },
@@ -26,5 +25,3 @@ const useStyles = makeStyles(theme => ({
     ...theme.mixins.toolbar,
   },
 }));
-
-export default useStyles;
