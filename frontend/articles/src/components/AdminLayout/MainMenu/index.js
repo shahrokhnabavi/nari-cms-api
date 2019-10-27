@@ -1,16 +1,15 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import IconButton from '@material-ui/core/IconButton';
-import { Drawer } from '@material-ui/core';
-import { useTheme } from '@material-ui/core/styles';
+import { Drawer, IconButton, withTheme } from '@material-ui/core';
 
+import Icon from '../../shared/Icon';
 import { AdminPanelLayoutActions } from '../../../actions';
 import MainMenuItem from './MainMenuItem';
-import Icon from '../../shared/Icon';
+import useStyles from './style';
 
 const Index = props => {
-  const { classes, isMenuOpen, closeMenu } = props;
-  const theme = useTheme();
+  const { theme, isMenuOpen, closeMenu } = props;
+  const classes = useStyles();
 
   return (
     <Drawer
@@ -24,7 +23,7 @@ const Index = props => {
     >
       <div className={classes.drawerHeader}>
         <IconButton onClick={closeMenu}>
-          {theme.direction === 'ltr' ? <Icon type="chevronLeft" /> : <Icon type="chevronRight"/>}
+          <Icon type={theme.direction === 'ltr' ? "chevron_left" : "chevron_right"} />
         </IconButton>
       </div>
 
@@ -41,4 +40,4 @@ const mapDispatchToProps = {
   closeMenu: AdminPanelLayoutActions.closeMenu,
 };
 
-export default connect(mapStoreToProps, mapDispatchToProps)(Index);
+export default connect(mapStoreToProps, mapDispatchToProps)(withTheme(Index));

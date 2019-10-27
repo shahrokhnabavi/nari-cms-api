@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { ArticleActions } from '../../../../actions';
 import './ArticleList.css';
 import withTitle from '../../../shared/withTitle';
+import FloatingButton from '../../../shared/FloatingButton';
 
 class ArticleList extends Component {
   componentDidMount() {
@@ -23,6 +24,7 @@ class ArticleList extends Component {
               (<div>List is empty</div>)
           }
         </ul>
+        <FloatingButton enter />
       </Fragment>);
   }
 }

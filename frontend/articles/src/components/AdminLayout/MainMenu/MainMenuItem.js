@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { ListItem, ListItemIcon, ListItemText, Divider } from "@material-ui/core";
-import menuItems from './menuItems';
+import menuItems from '../../../menuItems';
 import Index from '../../shared/Icon';
 
 const MainMenuItem = () => {
