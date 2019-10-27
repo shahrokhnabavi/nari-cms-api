@@ -1,16 +1,15 @@
 import { createMuiTheme } from '@material-ui/core';
-import indigo from '@material-ui/core/colors/indigo';
+import lightBlue from '@material-ui/core/colors/lightBlue';
 import red from '@material-ui/core/colors/red';
-import purple from '@material-ui/core/colors/purple';
+import blue from '@material-ui/core/colors/blue';
 
 const theme = {
   palette: {
-    primary: indigo,
     secondary: {
-      light: purple.A200,
-      main: purple.A400,
-      dark: purple.A700,
+      ...lightBlue,
+      contrastText: 'white'
     },
+    primary: blue,
     error: red,
   }
 };
