@@ -10,10 +10,6 @@
 }
 
 .ArticleList li {
-    background-color: #17a2b8;
-    border: 1px solid #0f6674;
-    padding: 10px 12px;
-    margin-bottom: 4px;
-    border-radius: 2px;
-    color: #fff;
+    border-bottom: 1px solid #9cd7da;
+    padding: 2px 0;
 }
