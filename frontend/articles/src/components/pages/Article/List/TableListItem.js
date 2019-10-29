@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Fragment} from 'react';
 import {
   IconButton, ListItemSecondaryAction, ListItemText, Checkbox, ListItem, ListItemIcon
 } from '@material-ui/core';
@@ -10,7 +10,7 @@ const TableListItem = props => {
   const classes = useStyles();
 
   return (
-    <ListItem role={undefined} button onClick={() => ({})}>
+    <Fragment>
       <ListItemIcon>
         <Checkbox
           edge="start"
@@ -28,7 +28,7 @@ const TableListItem = props => {
           <Icon type="delete" />
         </IconButton>
       </ListItemSecondaryAction>
-    </ListItem>
+    </Fragment>
   );
 };
 

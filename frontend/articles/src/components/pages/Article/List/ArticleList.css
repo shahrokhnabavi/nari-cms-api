@@ -7,6 +7,7 @@
     list-style: none;
     padding: 0 5px;
     text-align: left;
+    height: 100%;
 }
 
 .ArticleList li {

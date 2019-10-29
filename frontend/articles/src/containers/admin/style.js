@@ -4,6 +4,7 @@ import { drawerWidth } from '../../themeVariables';
 export default makeStyles(theme => ({
   root: {
     display: 'flex',
+    height: '100%'
   },
   content: {
     flexGrow: 1,
