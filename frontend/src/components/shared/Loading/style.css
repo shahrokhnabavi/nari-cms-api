@@ -1,0 +1,88 @@
+@keyframes ldsDoubleRing {
+    0% {
+        -webkit-transform: rotate(0);
+        transform: rotate(0);
+    }
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+@-webkit-keyframes ldsDoubleRing {
+    0% {
+        -webkit-transform: rotate(0);
+        transform: rotate(0);
+    }
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+@keyframes ldsDoubleRing_reverse {
+    0% {
+        -webkit-transform: rotate(0);
+        transform: rotate(0);
+    }
+    100% {
+        -webkit-transform: rotate(-360deg);
+        transform: rotate(-360deg);
+    }
+}
+@-webkit-keyframes ldsDoubleRing_reverse {
+    0% {
+        -webkit-transform: rotate(0);
+        transform: rotate(0);
+    }
+    100% {
+        -webkit-transform: rotate(-360deg);
+        transform: rotate(-360deg);
+    }
+}
+.ldsDoubleRing {
+    position: relative;
+    margin: auto;
+}
+.ldsDoubleRing div {
+    box-sizing: border-box;
+}
+.ldsDoubleRing > div {
+    position: absolute;
+    width: var(--dual-ring-size);
+    height: var(--dual-ring-size);
+    top: 0;
+    left: 0;
+    border-radius: 50%;
+    border: var(--dual-ring-thickness) solid #000;
+    border-color: var(--dual-ring-primary-color) transparent var(--dual-ring-primary-color) transparent;
+    -webkit-animation: ldsDoubleRing var(--dual-ring-speed) linear infinite;
+    animation: ldsDoubleRing var(--dual-ring-speed) linear infinite;
+}
+.ldsDoubleRing > div:nth-child(2) {
+    width: calc(var(--dual-ring-size) - var(--dual-ring-thickness) * 2 - 4px);
+    height: calc(var(--dual-ring-size) - var(--dual-ring-thickness) * 2 - 4px);
+    top: calc(var(--dual-ring-thickness) + 2px);
+    left: calc(var(--dual-ring-thickness) + 2px);
+    -webkit-animation: ldsDoubleRing_reverse var(--dual-ring-speed) linear infinite;
+    animation: ldsDoubleRing_reverse var(--dual-ring-speed) linear infinite;
+}
+.ldsDoubleRing > div:nth-child(2) {
+    border-color: transparent var(--dual-ring-secondary-color) transparent var(--dual-ring-secondary-color);
+}
+.ldsDoubleRing {
+    width: var(--dual-ring-size) !important;
+    height: var(--dual-ring-size) !important;
+    -webkit-transform: translate(
+            calc(var(--dual-ring-size) / 2 * -1),
+            calc(var(--dual-ring-size) / 2 * -1)
+    ) scale(1) translate(
+            calc(var(--dual-ring-size) / 2),
+            calc(var(--dual-ring-size) / 2)
+    );
+    transform: translate(
+            calc(var(--dual-ring-size) / 2 * -1),
+            calc(var(--dual-ring-size) / 2 * -1)
+    ) scale(1) translate(
+            calc(var(--dual-ring-size) / 2),
+            calc(var(--dual-ring-size) / 2)
+    );
+}

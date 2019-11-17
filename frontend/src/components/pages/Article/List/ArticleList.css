@@ -1,0 +1,50 @@
+.ArticleListTitle {
+    text-align: left;
+    padding-left: 10px;
+    margin-top: -32px;
+}
+
+.ArticleList {
+    list-style: none;
+    text-align: left;
+    box-sizing: border-box;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+}
+
+.ArticleList li {
+    border-bottom: 1px solid #9cd7da;
+    box-sizing: border-box;
+    white-space: nowrap;
+    padding: 14px 0 14px 42px;
+}
+
+.ArticleList li > span:nth-child(1),
+.ArticleList li > span:nth-child(2) {
+    display: inline-block;
+}
+
+.ArticleList li > span:nth-child(1) {
+    position: absolute;
+    top: 2px;
+    left: 0;
+}
+
+.ArticleList li > .ActionList {
+    background-color: white;
+    right: 0;
+    padding-right: 16px;
+}
+
+.ArticleListPager {
+    margin: 84px 12px 0;
+    padding: 52px 12px 12px 12px;
+    position: absolute;
+    bottom: 0;
+    box-sizing: border-box;
+    left: 0;
+    right: 0;
+    top: 0;
+    overflow: hidden;
+}
